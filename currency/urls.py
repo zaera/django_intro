@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from currency_app.views import hello_world, index_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', index_page),
+    path('hello_world/', hello_world),
 ]
