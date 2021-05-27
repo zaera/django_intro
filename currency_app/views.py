@@ -28,6 +28,7 @@ def hello_world(request):
                                     i++;
                                   }, 50);
                                 })();
+                                cosnole.log(1)
                             </script>
                         """)
 
