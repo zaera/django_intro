@@ -7,7 +7,8 @@ from random import randrange
 
 
 class Command(BaseCommand):
-    # help = 'My awesome generating data tool'
+    help = 'My awesome generating data tool'    # noqa
+
     def handle(self, *args, **options):
         fake = Faker()
         source_list = [

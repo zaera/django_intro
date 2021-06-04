@@ -1,5 +1,7 @@
 # from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render
+from currency_app.models import Rate
 
 
 # Create your views here.
@@ -50,3 +52,14 @@ def index_page(request):
                         </div>
                         </body>
                         </html>""")
+
+
+def rate_list(request):
+    queryset = Rate.objects.all()
+    ls = []
+    for obj in queryset:
+        ls.append(obj.sale)
+        context = {
+            'ls': queryset,
+        }
+    return render(request, 'tmp1.html', context=context)
