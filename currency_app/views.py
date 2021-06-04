@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from currency_app.models import Rate
+from django import forms
 
 
 # Create your views here.
@@ -54,12 +55,18 @@ def index_page(request):
                         </html>""")
 
 
+
+
 def rate_list(request):
+    class NameForm(forms.Form):
+        your_name = forms.CharField(label='Form', max_length=100)
+
     queryset = Rate.objects.all()
     ls = []
     for obj in queryset:
         ls.append(obj.sale)
         context = {
             'ls': queryset,
+            "form": NameForm(),
         }
     return render(request, 'tmp1.html', context=context)
