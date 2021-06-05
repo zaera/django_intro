@@ -65,8 +65,10 @@ def rate_list(request):
     ls = []
     for obj in queryset:
         ls.append(obj.sale)
-        context = {
-            'ls': queryset,
-            "form": NameForm(),
-        }
+        print(obj.created)
+    context = {
+        'ls': queryset,
+        "form": NameForm(),
+    }
+
     return render(request, 'tmp1.html', context=context)
