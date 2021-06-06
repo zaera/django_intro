@@ -15,12 +15,7 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=255)
     message = models.CharField(max_length=500)
 
-# @classmethod
-#     def create_random_rate(cls):
-#         import random
-#         cls.objects.create(
-#             currency=random.choice([1, 2]),
-#             buy=random.randint(20, 30),
-#             sale=random.randint(20, 30),
-#             source=random.choice([1, 2]),
-#         )
+
+class Bank(models.Model):
+    name = models.EmailField(max_length=255)
+    url = models.CharField(max_length=255)

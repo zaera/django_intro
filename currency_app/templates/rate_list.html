@@ -1,0 +1,119 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<style>
+  body{
+    background: url({% static 'bg.png' %}) repeat-x #fc0;
+    min-height: 100%;
+    width: 99%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    }
+  table tr td, table tr th{
+    background-color: rgba(255,255,255, 0.5) !important;
+  }
+  table{
+    box-shadow: 0px 5px 55px 15px #ccc;
+  }
+  img {
+    border-radius: 50%;
+    box-shadow: 5px 5px 5px #ccc;
+    -moz-box-shadow: 5px 5px 5px #ccc;
+    -webkit-box-shadow: 5px 5px 5px #ccc;
+    -khtml-box-shadow: 5px 5px 5px #ccc;
+  }
+table th {
+   text-align: center;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Rate List</title>
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+     <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<div class="row justify-content-center">
+    <div class="col-auto">
+<table class="table table-striped table-hover table-responsive align-middle">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Type</th>
+      <th scope="col">Buy/Sell</th>
+      <th scope="col">Source</th>
+      <th scope="col">
+        <!-- <button type="button" class="btn btn-success">Add new</button>  -->
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for ls_element in ls %}
+    <tr>
+      <th scope="row"><small>{{ls_element.created}}</th>
+      <td><img width="50" src="{% static 'usd.png' %}"></td>
+      <td ><strong><b>{{ls_element.buy}} /
+      {{ls_element.sale}}</td>
+      <td><i>
+      {% if ls_element.source == "vkurse" %}
+        <img width="50" src="{% static 'vkurse.jpg' %}">
+        {% elif ls_element.source == "privatbank" %}
+        <img width="50" src="{% static 'privatbank.jpg' %}">
+        {% elif ls_element.source == "monobank" %}
+        <img width="50" src="{% static 'monobank.png' %}">
+        {% endif %}
+      </td>
+      <td>
+        <button id='{{ls_element.id}}' type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModal" data-id="{{ls_element.id}}" data-action="single">View</button>
+       <!-- <button type="button" class="btn btn-outline-primary">Update</button> -->
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal" data-id="{{ls_element.id}}" data-action="delete_single">Delete</button>
+      </td>
+    </tr>
+  {% endfor%}
+  </tbody>
+  </div>
+  </div>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Rate action</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="modal-content">
+      <iframe src="" height="300" frameborder="0" scrolling="no" style="overflow: hidden" allowtransparency="true"></iframe>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="window.location.reload();">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+$('.modal').on('shown.bs.modal', function (e) {
+  var action = $(e.relatedTarget).data('action');
+  var id = $(e.relatedTarget).data('id');
+  $(this).find('iframe').attr('src','../' + action + '/' + id + '/')
+  console.log(action)
+})
+function refreshPage(){
+    window.location.reload();
+}
+</script>

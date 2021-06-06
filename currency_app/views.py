@@ -2,7 +2,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from currency_app.models import Rate
-from django import forms
 
 
 # Create your views here.
@@ -55,20 +54,35 @@ def index_page(request):
                         </html>""")
 
 
-
-
 def rate_list(request):
-    class NameForm(forms.Form):
-        your_name = forms.CharField(label='Form', max_length=100)
-
     queryset = Rate.objects.all()
-    ls = []
-    for obj in queryset:
-        ls.append(obj.sale)
-        print(obj.created)
     context = {
         'ls': queryset,
-        "form": NameForm(),
     }
 
-    return render(request, 'tmp1.html', context=context)
+    return render(request, 'rate_list.html', context=context)
+
+
+def rate_single(request, pk):
+    rate = Rate.objects.get(id=pk)
+    context = {
+        'single': rate
+    }
+    return render(request, 'rate_single.html', context=context)
+
+
+def rate_delete_single(request, pk):
+    Rate.objects.filter(id=pk).delete()
+    return render(request, 'rate_single_delete.html')
+
+
+def bank_list(request):
+    return HttpResponse('bank_list')
+
+
+def bank_single(request):
+    return HttpResponse('bank_single')
+
+
+def bank_delete_single(request):
+    return HttpResponse('bank_delete_single')
