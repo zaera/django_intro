@@ -25,9 +25,7 @@ urlpatterns = [
     path('currency/rate/list/', rate_list),
     path('currency/rate/single/<int:pk>/', rate_single),
     path('currency/rate/delete_single/<int:pk>/', rate_delete_single),
-
     path('currency/bank/list/', bank_list),
-    path('currency/bank/single/', bank_single),
-    path('currency/bank/delete_single/', bank_delete_single),
-
+    path('currency/bank/single/<int:pk>/', bank_single),
+    path('currency/bank/delete_single/<int:pk>/', bank_delete_single),
 ]

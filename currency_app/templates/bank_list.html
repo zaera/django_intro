@@ -34,7 +34,7 @@ table th {
 </style>
 <head>
     <meta charset="UTF-8">
-    <title>Rate List</title>
+    <title>Bank List</title>
       <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 </head>
 <body>
@@ -46,30 +46,29 @@ table th {
 <table class="table table-striped table-hover table-responsive align-middle">
   <thead>
     <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Type</th>
-      <th scope="col">Buy/Sell</th>
-      <th scope="col">Source</th>
-      <th scope="col">
-        <!-- <button type="button" class="btn btn-success">Add new</button>  -->
-      </th>
+      <th scope="col">Bank</th>
+      <th scope="col">Link</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
   {% for ls_element in ls %}
     <tr>
-      <td class="align-middle" scope="row"><small>{{ls_element.created}}</td>
-      <td><img width="50" src="{% static 'usd.png' %}"></td>
-      <td class="align-middle"><strong><b>{{ls_element.buy}} /
-      {{ls_element.sale}}</td>
-      <td><i>
-      {% if ls_element.source == "vkurse" %}
+      <td>
+        {% if ls_element.name == "Vkurse" %}
         <img width="50" src="{% static 'vkurse.jpg' %}">
-        {% elif ls_element.source == "privatbank" %}
+        {% elif ls_element.name == "Privatbank" %}
         <img width="50" src="{% static 'privatbank.jpg' %}">
-        {% elif ls_element.source == "monobank" %}
+        {% elif ls_element.name == "Monobank" %}
         <img width="50" src="{% static 'monobank.png' %}">
+        {% elif ls_element.name == "Alphabank" %}
+        <img width="50" src="{% static 'alpha.png' %}">
+        {% elif ls_element.name == "Raiffeisenbank" %}
+        <img width="50" src="{% static 'reiff.png' %}">
         {% endif %}
+      </td>
+      <td class="align-middle">
+        <a href="{{ls_element.url}}" target="blank">{{ls_element.url}}</a>
       </td>
       <td class="align-middle">
         <button id='{{ls_element.id}}' type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModal" data-id="{{ls_element.id}}" data-action="single">View</button>
@@ -88,7 +87,7 @@ table th {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Rate action</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Bank action</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

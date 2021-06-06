@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
-from currency_app.models import Rate
+from currency_app.models import Rate, Bank
 
 
 # Create your views here.
@@ -77,12 +77,21 @@ def rate_delete_single(request, pk):
 
 
 def bank_list(request):
-    return HttpResponse('bank_list')
+    queryset = Bank.objects.all()
+    context = {
+        'ls': queryset,
+    }
+    return render(request, 'bank_list.html', context=context)
 
 
-def bank_single(request):
-    return HttpResponse('bank_single')
+def bank_single(request, pk):
+    bank = Bank.objects.get(id=pk)
+    context = {
+        'single': bank
+    }
+    return render(request, 'bank_single.html', context=context)
 
 
-def bank_delete_single(request):
-    return HttpResponse('bank_delete_single')
+def bank_delete_single(request, pk):
+    Bank.objects.filter(id=pk).delete()
+    return render(request, 'bank_single_delete.html')

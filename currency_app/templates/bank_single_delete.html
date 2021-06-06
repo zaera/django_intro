@@ -1,0 +1,28 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<style>
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Rate Single Record</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+<div style=" display: flex; align-items: center; justify-content: center; align-conten:center; min-height: 100%;  /* Fallback for browsers do NOT support vh unit */min-height: 100vh;">
+  <div class="container col-md-3 py-5" style="height: 180px; width:300px">
+        <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Success!</h5>
+                <p class="card-text">Data was deleted!</p>
+              </div>
+        </div>
+  </div>
+</div>
+</body>
+</html>
