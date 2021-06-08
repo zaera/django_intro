@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from currency_app.models import Rate
+from currency_app.models import Rate, Bank
 from currency_app.models import ContactUs
 from faker import Faker
 import random
@@ -29,3 +29,23 @@ class Command(BaseCommand):
                  subject=fake.text(max_nb_chars=50),
                  message=fake.text(max_nb_chars=200),
              )
+        Bank.objects.create(
+            name='Privatbank',
+            url='https://next.privat24.ua/',
+        )
+        Bank.objects.create(
+            name='Monobank',
+            url='https://www.monobank.ua/',
+        )
+        Bank.objects.create(
+            name='Vkurse',
+            url='http://vkurse.dp.ua/',
+        )
+        Bank.objects.create(
+            name='Alphabank',
+            url='https://alfabank.ua/',
+        )
+        Bank.objects.create(
+            name='Raiffeisenbank',
+            url='https://raiffeisen.ua/',
+        )
