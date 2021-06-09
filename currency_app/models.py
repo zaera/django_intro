@@ -17,5 +17,5 @@ class ContactUs(models.Model):
 
 
 class Bank(models.Model):
-    name = models.EmailField(max_length=255)
+    name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
