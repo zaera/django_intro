@@ -11,16 +11,16 @@
       <title>Bank List</title>
       <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-<!-- Font Awesome -->
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-  rel="stylesheet"
-/>
-<!-- Google Fonts -->
-<link
-  href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
-  rel="stylesheet"
-/>
+      <!-- Font Awesome -->
+      <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        rel="stylesheet"
+      />
+      <!-- Google Fonts -->
+      <link
+        href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
+        rel="stylesheet"
+      />
    </head>
    <style>
       body {
@@ -35,7 +35,7 @@
       background-color: rgba(255,255,255, 1) !important;
          text-align: center;
          margin-top: auto;
-margin-bottom: auto;
+      margin-bottom: auto;
       }
       table{
       box-shadow: 0px 0px 1px 0px #6c757d;
@@ -49,7 +49,10 @@ margin-bottom: auto;
       .table {
     table-layout: fixed;
      width:75vw;
-}
+      }
+      .contact{
+         position: fixed; bottom: 30px; right: 40px;
+      }
    </style>
    <body>
       <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
@@ -70,6 +73,9 @@ margin-bottom: auto;
                </li>
                <li class="nav-item">
                   <a class="nav-link" href="/currency/rate/list/">Rate list</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="/currency/сcntact_us/list/">Messages</a>
                </li>
             </ul>
          </div>
@@ -139,9 +145,6 @@ margin-bottom: auto;
                </div>
                <div class="modal-body" id="modalbody">
                </div>
-               <div class="modal-footer d-block" id="modalfooter">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="window.location.reload();">Close</button>
-               </div>
             </div>
          </div>
       </div>
@@ -167,9 +170,12 @@ margin-bottom: auto;
          id = i
        }
      }
-     $( "#modalbody" ).append('<h5 class="card-title">'+names[id]+'</h5>\n' +
-             '    <p class="card-text"></p>\n' +
-             '    <a href="#" class="card-link">'+ urls[id]+'</a>');
+     $( "#modalbody" ).append('<h5 class="card-title">'+names[id]+'</h5>' +
+                              '<p class="card-text"></p>' +
+                              '<a href="#" class="card-link">'+ urls[id]+'</a>' +
+                              '<div class="modal-footer d-block">' +
+                              '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
+                              '</div>');
    }
    else if (action == 'update') {
      document.getElementById('ModalLabel').innerHTML = 'Update'
@@ -180,27 +186,29 @@ margin-bottom: auto;
          id = i
        }
      }
-      var large = '<form id="form_upd" onsubmit="return update()">\n' +
-              '\t<div class="mb-3">\n' +
-              '<label id="data_id">'+original_id+'</label><p>' +
-              '\t\t<label class="form-label">Bank Name</label>\n' +
-              '\t\t<input type="text" maxlength="255" class="form-control" id="bname" name="bname" required value="'+names[id]+'"/>\n' +
-              '\t</div>\n' +
-              '\t<div class="mb-3">\n' +
-              '\t\t<label class="form-label">Link</label>\n' +
-              '\t\t<input type="text" maxlength="255" class="form-control" id="blink" name="subject" required value="'+urls[id]+'"/>\n' +
-              '\t</div>\n' +
-              '<button type="submit" class="btn btn-warning float-end">Update</button>' +
-              '</form>'
-      $('#modalbody').append(large);
+      $('#modalbody').append('<form id="form_upd" onsubmit="return update()">' +
+                    '<div class="mb-3">' +
+                    '<label id="data_id">'+original_id+'</label><p>' +
+                    '<label class="form-label">Bank Name</label>' +
+                    '<input type="text" maxlength="255" class="form-control" id="bname" name="bname" required value="'+names[id]+'"/>' +
+                    '</div>' +
+                    '<div class="mb-3">' +
+                    '<label class="form-label">Link</label>' +
+                    '<input type="text" maxlength="255" class="form-control" id="blink" name="subject" required value="'+urls[id]+'"/>' +
+                    '</div>' +
+                    '<div class="modal-footer d-block">' +
+                    '<button type="submit" class="btn btn-warning float-end">Update</button>' +
+                    '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
+                    '</div>' +
+                    '</form>');
       $('#modalfooter').append('');
    }
    else if (action == 'create') {
      document.getElementById('ModalLabel').innerHTML = 'Add new'
-     var large = '<form id="form" method="post"><div class="mb-3">';
-     large +=`{% csrf_token %}{{form.as_p}}`;
-     large+='</div><button type="submit" class="btn btn-warning float-end">Add</button></form> ';
-     $('#modalbody').append(large);
+     $('#modalbody').append('<form id="form" method="post"><div class="mb-3">' +
+                            `{% csrf_token %}{{form.as_p}}` +
+                           '</div><div class="modal-footer d-block"><button type="submit" class="btn btn-warning float-end">Add</button> ' +
+                           '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button></div></form>');
      document.getElementById("id_name").classList.add("form-control");
      document.getElementById("id_url").classList.add("form-control");
    }
@@ -214,7 +222,6 @@ margin-bottom: auto;
    })
    }
    function update(){
-
       var id = document.getElementById('data_id').innerHTML;
       var name = document.getElementById('bname').value;
       var link = document.getElementById('blink').value;
@@ -229,5 +236,5 @@ margin-bottom: auto;
    }
    $(".modal").on("hidden.bs.modal", function(){
     $(".modal-body").html("");
-});
+   })
 </script>

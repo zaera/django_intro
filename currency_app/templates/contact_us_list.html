@@ -50,9 +50,6 @@
     table-layout: fixed;
      width:75vw;
       }
-      .contact{
-         position: fixed; bottom: 30px; right: 40px;
-      }
    </style>
    <body>
      <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
@@ -65,7 +62,7 @@
          </button>
          <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-               <li class="nav-item active">
+               <li class="nav-item ">
                   <a class="nav-link" href="/">Home</a>
                </li>
                <li class="nav-item ">
@@ -74,7 +71,7 @@
                <li class="nav-item">
                   <a class="nav-link" href="/currency/rate/list/">Rate list</a>
                </li>
-               <li class="nav-item">
+               <li class="nav-item active">
                   <a class="nav-link" href="/currency/сcntact_us/list/">Messages</a>
                </li>
             </ul>
@@ -83,63 +80,47 @@
       <br>
       <br>
       <br>
-<div class="card text-center">
-  <div class="card-header">
-    <p>
-      <p>
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">Welcome to currency App</h5>
-    <p class="card-text">Use the following menu to navigate</p>
-    <a href="currency/rate/list/" class="btn btn-primary">Rate list</a>
-    <p>
-    <p>
-    <a href="currency/bank/list/" class="btn btn-primary">Bank list</a>
-    <p>
-    <p>
-    <a href="/currency/сcntact_us/list/" class="btn btn-primary">Messages</a>
-  </div>
-  <div class="card-footer text-muted">
-    2 days ago
-  </div>
-</div>
-
-
-     <!-- Modal -->
-      <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="ModalLabel"></h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                  </button>
-               </div>
-               <div class="modal-body" id="modalbody">
-               </div>
-            </div>
+      <div class="row justify-content-center">
+         <div class="col-auto">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th scope="col">Email</th>
+                     <th scope="col">Subject</th>
+                     <th scope="col">Message</th>
+                     <th scope="col"></th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for data_element in data %}
+                  <tr>
+                     <td class="text-truncate">
+                         {{ data_element.email_from }}
+                     </td>
+                     <td class="text-truncate align-middle">
+                        {{ data_element.subject }}
+                     </td>
+                     <td class="text-truncate align-middle">
+                        {{ data_element.message }}
+                     </td>
+                      <td class="align-middle">
+                        <button type="button" class="btn btn-danger" onclick="del({{data_element.id}})" data-id="{{ls_element.id}}" data-action="delete"><i class="fas fa-trash-alt"></i></button>
+                     </td>
+                  </tr>
+                  {% endfor%}
+               </tbody>
          </div>
       </div>
-
-   <!-- Contact US -->
-      <a class="contact" data-toggle="modal" data-target="#Modal" data-action="contact" href="">CONTACT US</a>
+      </table>
 </body>
 </html>
 <script>
-    $('.modal').on('shown.bs.modal', function (e) {
-   var action = $(e.relatedTarget).data('action');
-    if (action == 'contact') {
-     document.getElementById('ModalLabel').innerHTML = 'Contact Us'
-     $('#modalbody').append('<form>\n' +
-                   `{% csrf_token %}{{form.as_p}}` +
-                   '<div class="modal-footer d-block">' +
-                   '<button type="submit" class="btn btn-warning float-end">Send</button>' +
-                   '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
-                   '</div>' +
-                   '</form>');
-     document.getElementById("id_email_from").classList.add("form-control");
-     document.getElementById("id_subject").classList.add("form-control");
-     document.getElementById("id_message").classList.add("form-control");
-   }
+   function del(val){
+     $.ajax({
+         url: '../' + 'delete' + '/' + val + '/',
+         success: function(data){
+            window.location.reload();
+         },
    })
-    </script>
+   }
+</script>

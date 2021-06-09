@@ -1,5 +1,5 @@
 from django import forms
-from currency_app.models import Bank
+from currency_app.models import Bank, ContactUs
 
 
 class BankForm(forms.ModelForm):
@@ -8,4 +8,14 @@ class BankForm(forms.ModelForm):
         fields = (
             'name',
             'url',
+        )
+
+
+class ContactUsForm(forms.ModelForm):
+    class Meta:
+        model = ContactUs
+        fields = (
+            'email_from',
+            'subject',
+            'message',
         )
