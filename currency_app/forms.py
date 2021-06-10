@@ -30,4 +30,3 @@ class RateForm(forms.ModelForm):
             'buy',
             'source',
         )
-
