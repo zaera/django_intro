@@ -139,4 +139,8 @@
      document.getElementById("id_message").classList.add("form-control");
    }
    })
+        $(".modal").on("hidden.bs.modal", function(){
+    $(".modal-body").html("");
+    document.getElementById('ModalLabel').innerHTML = ''
+    })
     </script>
