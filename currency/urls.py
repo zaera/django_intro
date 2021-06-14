@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
-from django.conf import settings
+# from django.conf import settings
 from currency_app.views import (
                                 rate_list,
                                 rate_edit,
