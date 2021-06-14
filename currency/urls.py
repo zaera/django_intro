@@ -1,24 +1,28 @@
-"""currency URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
-from currency_app.views import hello_world, index_page
-
+from django.urls import path, include
+import debug_toolbar
+# from django.conf import settings
+from currency_app.views import (
+                                rate_list,
+                                rate_edit,
+                                rate_delete_single,
+                                bank_list,
+                                bank_edit,
+                                bank_delete,
+                                index_page,
+                                contact_us_list,
+                                contact_us_delete,
+                                )
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index_page),
-    path('hello_world/', hello_world),
+    path('currency/rate/list/', rate_list),
+    path('currency/rate/edit/<int:pk>/<m>/<s>/<b>/<src>/', rate_edit),
+    path('currency/rate/delete_single/<int:pk>/', rate_delete_single),
+    path('currency/bank/list/', bank_list),
+    path('currency/bank/edit/<int:pk>/<npk>/<upk>/', bank_edit),
+    path('currency/bank/delete_single/<int:pk>/', bank_delete),
+    path('currency/сontact_us/list/', contact_us_list),
+    path('currency/сontact_us/delete_single/<int:pk>/', contact_us_delete),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
