@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     "bootstrap5",
     'bootstrap_modal_forms',
+    'debug_toolbar',
 
     'currency_app',
 ]
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 
 ]
@@ -137,3 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 X_FRAME_OPTIONS = 'ALLOWALL'
 
 XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

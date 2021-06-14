@@ -1,5 +1,7 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+import debug_toolbar
+from django.conf import settings
 from currency_app.views import (
                                 rate_list,
                                 rate_edit,
@@ -22,4 +24,5 @@ urlpatterns = [
     path('currency/bank/delete_single/<int:pk>/', bank_delete),
     path('currency/сontact_us/list/', contact_us_list),
     path('currency/сontact_us/delete_single/<int:pk>/', contact_us_delete),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
