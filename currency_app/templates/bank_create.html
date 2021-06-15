@@ -1,18 +1,13 @@
 {% extends 'template.html' %}
 {% block body_content %}
-<script>
-   function append_css() {
-   document.getElementById("id_name").classList.add("form-control");
-   document.getElementById("id_url").classList.add("form-control");
-   }
-</script>
-<body onload="append_css()">
+{% load crispy_forms_tags %}
+<body>
    <div class="card" style="width: 18rem; margin:0 auto">
       <div class="card-body">
          <form id="form" method="post">
             <div class="mb-3">
                {% csrf_token %}
-               {{ form.as_p }}
+               {{ form|crispy }}
             </div>
             <div class="modal-footer d-block">
                <div class="container">
@@ -24,6 +19,6 @@
          </form>
       </div>
    </div>
-   {% endblock body_content %}
+{% endblock body_content %}
 </body>
 </html>

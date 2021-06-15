@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'anymail',
     'rangefilter',
     'import_export',
+    'crispy_forms',
 
     'currency_app',
 ]
@@ -157,3 +158,5 @@ ANYMAIL = {
 }
 EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'  # or sendgrid.EmailBackend, or...
 DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have this in settings
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
