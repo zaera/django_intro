@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'bootstrap_modal_forms',
     'debug_toolbar',
     'anymail',
+    'rangefilter',
+    'import_export',
 
     'currency_app',
 ]
