@@ -1,5 +1,3 @@
-# from django.shortcuts import render
-# from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from currency_app.models import Rate, Bank, ContactUs
@@ -65,6 +63,7 @@ class BankCreate(CreateView):
         'url',
     )
     template_name = 'bank_create.html'
+
     success_url = reverse_lazy('currency_app:bank-list')
 
 
@@ -112,9 +111,3 @@ def contact_us_delete(request, pk):
     ContactUs.objects.filter(id=pk).delete()
     # return HttpResponseRedirect(reverse('currency_app:contact_us_list'))
     return redirect('currency_app:contact_us_list')
-
-
-# html shrinked and resued
-#
-#
-# createview не имеет првоерки на инпут(который был дефолтный при создании формы вручную)?
