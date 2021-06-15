@@ -19,16 +19,10 @@ class RateAdmin(ImportExportModelAdmin):
     resource_class = RateResource
 
 
-admin.site.register(Rate, RateAdmin)
-
-
 class BankAdmin(admin.ModelAdmin):
     list_display = ('name', 'url')
     list_filter = ('name',)
     search_fields = ('name', 'url',)
-
-
-admin.site.register(Bank, BankAdmin)
 
 
 class ContactUsResource(resources.ModelResource):
@@ -50,5 +44,9 @@ class ContactUsAdmin(ImportExportModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+
+admin.site.register(Rate, RateAdmin)
+
+admin.site.register(Bank, BankAdmin)
 
 admin.site.register(ContactUs, ContactUsAdmin)

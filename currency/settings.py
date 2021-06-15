@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,7 +153,7 @@ INTERNAL_IPS = [
 
 # sendinblue.com
 ANYMAIL = {
-    "SENDINBLUE_API_KEY": "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",
+    "SENDINBLUE_API_KEY": os.environ.get('SENDINBLUE_API_KEY'),
 }
 EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'  # or sendgrid.EmailBackend, or...
 DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have this in settings
