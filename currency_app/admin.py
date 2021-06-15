@@ -31,11 +31,18 @@ class BankAdmin(admin.ModelAdmin):
 admin.site.register(Bank, BankAdmin)
 
 
-class ContactUsAdmin(admin.ModelAdmin):
+class ContactUsResource(resources.ModelResource):
+
+    class Meta:
+        model = ContactUs
+
+
+class ContactUsAdmin(ImportExportModelAdmin):
     list_display = ('email_from', 'subject', 'message', 'created')
     list_filter = ('created', ('created', DateTimeRangeFilter))
     search_fields = ('message', 'subject')
     readonly_fields = ('email_from', 'subject', 'message', 'created')
+    resource_class = ContactUsResource
 
     def has_delete_permission(self, request, obj=None):
         return False
