@@ -1,161 +1,84 @@
-{# Load the tag library #}
-{% load bootstrap5 %}
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<!DOCTYPE html>
+{% extends 'template.html' %}
+{% block body_content %}
 {% load static %}
-<html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <title>Bank List</title>
-      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-      <!-- Font Awesome -->
-      <link
-         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-         rel="stylesheet"
-         />
-      <!-- Google Fonts -->
-      <link
-         href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
-         rel="stylesheet"
-         />
-   </head>
-   <style>
-      body {
-      min-height: 81.4vh;
-      background: linear-gradient(0deg, #fff, 50%, rgb(210, 231, 252));
-      font-family: 'Quicksand', sans-serif;
-      font-weight: bold;
-      background-repeat: no-repeat;
-      overflow-x: hidden;
-      }
-      table tr td, table tr th{
-      background-color: rgba(255,255,255, 1) !important;
-      text-align: center;
-      margin-top: auto;
-      margin-bottom: auto;
-      }
-      table{
-      box-shadow: 0px 0px 1px 0px #6c757d;
-      }
-      .pic{
-      border-radius: 50%;
-      }
-      .errorlist{
-      visibility: hidden;
-      }
-      .table {
-      table-layout: fixed;
-      width:75vw;
-      }
-      .contact{
-      position: fixed; bottom: 30px; right: 40px;
-      }
-      a { display: block; }
-   </style>
-   <body>
-      <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-      <nav class="navbar navbar-dark bg-primary fixed-top">
-         <a class="navbar-brand"  href="#">  <img src="{% static 'dollar.png' %}" width="20" height="30" alt=""> Currency App</a>
-         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-         </button>
-         <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav mr-auto">
-               <li class="nav-item ">
-                  <a class="nav-link" href="/">Home</a>
-               </li>
-               <li class="nav-item active">
-                  <a class="nav-link" href="/currency/bank/list/">Bank list</a>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="/currency/rate/list/">Rate list</a>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="/currency/сontact_us/list/">Messages</a>
-               </li>
-            </ul>
+<div class="row justify-content-center">
+   <div class="col-auto">
+      <table class="table text-center table-responsive">
+         <thead>
+            <tr>
+               <th scope="col"></th>
+               <th scope="col">Bank</th>
+               <th scope="col">Link</th>
+               <th scope="col">
+                  <!-- <button type="button" class="btn btn-success">Add new</button>  -->
+               </th>
+            </tr>
+         </thead>
+         <tbody>
+            {% for ls_element in object_list %}
+            <tr>
+               <td class="align-middle">
+                  {% if ls_element.name == "Vkurse" %}
+                  <img class="pic" width="50" src="{% static 'vkurse.jpg' %}">
+                  {% elif ls_element.name == "Privatbank" %}
+                  <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
+                  {% elif ls_element.name == "Monobank" %}
+                  <img class="pic" width="50" src="{% static 'monobank.png' %}">
+                  {% elif ls_element.name == "Alphabank" %}
+                  <img class="pic" width="50" src="{% static 'alpha.png' %}">
+                  {% elif ls_element.name == "Raiffeisenbank" %}
+                  <img class="pic" width="50" src="{% static 'reiff.png' %}">
+                  {% else %}
+                  <img class="pic" width="50" src="{% static 'no_image.png' %}">
+                  {% endif %}
+               </td>
+               <td class="text-truncate align-middle">
+                  {{ ls_element.name }}
+               </td>
+               <td  class="text-truncate align-middle col-md-2">
+                  <a href="{{ls_element.url}}" target="blank">{{ls_element.url}}</a>
+               </td>
+               <td class="align-middle">
+                  <div id="outer">
+                     <button type="button" class="btn btn-warning" onclick='location.href="{% url 'currency_app:bank-read-single' ls_element.id %}"'><i class="fas fa-eye"></i></button>
+                     <button type="button" class="btn btn-primary" onclick='location.href="{% url 'currency_app:bank-update-single' ls_element.id %}"'><i class="fas fa-pencil-alt"></i></button>
+                     <button type="button" class="btn btn-danger" onclick='location.href="{% url 'currency_app:bank-delete-single' ls_element.id %}"'><i class="fas fa-trash-alt"></i></button>
+                  </div>
+               </td>
+            </tr>
+            {% endfor%}
+         </tbody>
+   </div>
+</div>
+</table>
+<a class="contact"> <button type="button" class="btn btn-success" onclick='location.href="{% url 'currency_app:bank-create' %}"'><i class="fas fa-plus-circle"></i></button></a>
+<br>
+<br>
+<span class="glyphicon glyphicon-name"></span>
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="ModalLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
          </div>
-      </nav>
-      <br>
-      <br>
-      <br>
-      <div class="row justify-content-center">
-         <div class="col-auto">
-            <table class="table">
-               <thead>
-                  <tr>
-                     <th scope="col"></th>
-                     <th scope="col">Bank</th>
-                     <th scope="col">Link</th>
-                     <th scope="col"></th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {% for ls_element in ls %}
-                  <tr>
-                     <td class="text-truncate">
-                        {% if ls_element.name == "Vkurse" %}
-                        <img class="pic" width="50" src="{% static 'vkurse.jpg' %}">
-                        {% elif ls_element.name == "Privatbank" %}
-                        <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
-                        {% elif ls_element.name == "Monobank" %}
-                        <img class="pic" width="50" src="{% static 'monobank.png' %}">
-                        {% elif ls_element.name == "Alphabank" %}
-                        <img class="pic" width="50" src="{% static 'alpha.png' %}">
-                        {% elif ls_element.name == "Raiffeisenbank" %}
-                        <img class="pic" width="50" src="{% static 'reiff.png' %}">
-                        {% else %}
-                        <img class="pic" width="50" src="{% static 'no_image.png' %}">
-                        {% endif %}
-                     </td>
-                     <td class="text-truncate align-middle">
-                        {{ ls_element.name }}
-                     </td>
-                     <td class="text-truncate align-middle">
-                        <a href="{{ls_element.url}}" target="blank">{{ls_element.url}}</a>
-                     </td>
-                     <td class="align-middle">
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#Modal" data-id="{{ls_element.id}}" data-action="view"><i class="fas fa-eye"></i></button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal" data-id="{{ls_element.id}}" data-action="update"><i class="fas fa-pencil-alt"></i></button>
-                        <button type="button" class="btn btn-danger" onclick="del({{ls_element.id}})" data-id="{{ls_element.id}}" data-action="delete"><i class="fas fa-trash-alt"></i></button>
-                     </td>
-                  </tr>
-                  {% endfor%}
-               </tbody>
+         <div class="modal-body" id="modalbody">
          </div>
       </div>
-      </table>
-      <a class="contact"> <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Modal" data-id="" data-action="create"><i class="fas fa-plus-circle"></i></button></a>
-      <br>
-      <br>
-      <span class="glyphicon glyphicon-name"></span>
-      <!-- Modal -->
-      <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="ModalLabel"></h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                  </button>
-               </div>
-               <div class="modal-body" id="modalbody">
-               </div>
-            </div>
-         </div>
-      </div>
-   </body>
+   </div>
+</div>
+</body>
 </html>
 <script type="text/javascript">
+   document.getElementById("banklist").classList.add("active");
+   document.title = "Bank list";
    let ids = []
    let names = []
    let urls=[]
-       {% for ls_element in ls %}
+       {% for ls_element in object_list %}
    ids.push('{{ls_element.id}}')
    names.push('{{ls_element.name}}')
    urls.push('{{ls_element.url}}')
@@ -231,7 +154,7 @@
          success: function(data){
          }
    })
-      setTimeout(function() {   document.location.reload(); }, 10);
+      setTimeout(function() {   document.location.reload(); }, 100);
       window.location.reload();
    }
    $(".modal").on("hidden.bs.modal", function(){
@@ -239,3 +162,4 @@
     document.getElementById('ModalLabel').innerHTML = ''
    })
 </script>
+{% endblock body_content %}
