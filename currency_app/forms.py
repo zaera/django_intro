@@ -1,5 +1,5 @@
 from django import forms
-from currency_app.models import Bank, Rate
+from currency_app.models import Bank, Rate, ContactUs
 
 
 class BankForm(forms.ModelForm):
@@ -20,3 +20,18 @@ class RateForm(forms.ModelForm):
             'buy',
             'source',
         )
+
+
+class ContactUsCreateForm(forms.ModelForm):
+    class Meta:
+        model = ContactUs
+        fields = (
+            'email_from',
+            'subject',
+            'message',
+        )
+
+    #                               Do when any View is called anywhere
+    # def save(self, commit =True):
+    #     print('here\n'*10)
+    #     return super().save(commit)

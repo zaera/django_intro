@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "bootstrap5",
     'bootstrap_modal_forms',
     'debug_toolbar',
+    'anymail',
 
     'currency_app',
 ]
@@ -143,3 +144,10 @@ XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+# sendinblue.com
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": "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",
+}
+EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'  # or sendgrid.EmailBackend, or...
+DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have this in settings

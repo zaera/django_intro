@@ -8,20 +8,20 @@
 </script>
 <body onload="append_css()">
    <div class="card" style="width: 18rem; margin:0 auto">
-   <div class="card-body">
-      <form id="form" method="post">
-         <div class="mb-3">
-            {% csrf_token %}
-            {{ form.as_p }}
-         </div>
-         <div class="modal-footer d-block">
-            <div class="container">
-               <div class="col-md-12 text-center">
-                  <button onclick='location.href="{% url 'currency_app:bank-list' %}"' class="btn btn-primary">Back</button>
-                  <button type="submit" class="btn btn-warning">Add</button>
-               </div>
+      <div class="card-body">
+         <form id="form" method="post">
+            <div class="mb-3">
+               {% csrf_token %}
+               {{ form.as_p }}
             </div>
-      </form>
+            <div class="modal-footer d-block">
+               <div class="container">
+                  <div class="col-md-12 text-center">
+                     <button onclick='location.href="{% url 'currency_app:bank-list' %}"' class="btn btn-primary">Back</button>
+                     <button type="submit" class="btn btn-warning">Add</button>
+                  </div>
+               </div>
+         </form>
       </div>
    </div>
    {% endblock body_content %}
