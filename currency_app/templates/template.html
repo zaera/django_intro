@@ -1,0 +1,98 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title></title>
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <!-- Font Awesome -->
+      <link
+         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+         rel="stylesheet"
+         />
+      <!-- Google Fonts -->
+      <link
+         href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
+         rel="stylesheet"
+         />
+   </head>
+   <style>
+      body {
+      min-height: 81.4vh;
+      background: linear-gradient(0deg, #fff, 50%, rgb(210, 231, 252));
+      font-family: 'Quicksand', sans-serif;
+      font-weight: bold;
+      background-repeat: no-repeat;
+      overflow-x: hidden;
+      }
+      tr td, tr th{
+      background-color: rgba(255,255,255, 1) !important;
+      text-align: center;
+      margin-top: auto;
+      margin-bottom: auto;
+      }
+      table{
+      box-shadow: 0px 0px 1px 0px #6c757d;
+      }
+      .pic{
+      border-radius: 50%;
+      }
+      .errorlist{
+      visibility: hidden;
+      }
+      .contact{
+      position: fixed; bottom: 30px; right: 40px;
+      }
+      .table td, .table th {
+      min-width: 100px;
+      max-width: 300px;
+      }
+      #outer
+      {
+      min-width: 135px;
+      text-align: center;
+      }
+      .inner
+      {
+      display: inline-block;
+      }
+   </style>
+   <body>
+      <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+      <nav class="navbar navbar-dark bg-primary fixed-top">
+         <a class="navbar-brand"  href="{% url 'index' %}">  <img src="{% static 'dollar.png' %}" width="20" height="30" alt=""> Currency App</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+               <li id="home" class="nav-item">
+                  <a class="nav-link" href="{% url 'index' %}">Home</a>
+               </li>
+               <li id="banklist" class="nav-item">
+                  <a class="nav-link" href="{% url 'currency_app:bank-list' %}">Bank list</a>
+               </li>
+               <li id="ratelist" class="nav-item">
+                  <a class="nav-link" href="{% url 'currency_app:rate-list' %}">Rate list</a>
+               </li>
+               <li id="messages" class="nav-item">
+                  <a class="nav-link" href="{% url 'currency_app:contact_us_list' %}">Messages</a>
+               </li>
+            </ul>
+         </div>
+      </nav>
+      <br>
+      <br>
+      <br>
+      {% block body_content %}
+      {% endblock body_content %}
+   </body>
+</html>

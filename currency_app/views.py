@@ -1,10 +1,10 @@
 # from django.shortcuts import render
 # from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-import urllib.parse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from currency_app.models import Rate, Bank, ContactUs
-from currency_app.forms import BankForm, ContactUsForm, RateForm
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
+from currency_app.forms import BankForm
 
 
 def handler404(request, exception, template_name="index.html"):
@@ -14,35 +14,19 @@ def handler404(request, exception, template_name="index.html"):
 
 
 def index_page(request):
-    if request.method == 'POST':
-        form_data = request.POST
-        form = ContactUsForm(form_data)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/')
-    elif request.method == 'GET':
-        form = ContactUsForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'index.html', context=context)
+    return render(request, 'index.html')
 
 
-def rate_list(request):
-    if request.method == 'POST':
-        form_data = request.POST
-        form = RateForm(form_data)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/currency/rate/list/')
-    elif request.method == 'GET':
-        form = RateForm()
-    queryset = Rate.objects.all()
-    context = {
-        'ls': queryset,
-        'form': form,
-    }
-    return render(request, 'rate_list.html', context=context)
+class Ratelist(ListView):
+    model = Rate
+    fields = (
+        'moneytype',
+        'sale',
+        'buy',
+        'source',
+    )
+    template_name = 'rate_list.html'
+    success_url = reverse_lazy('rate-list')
 
 
 def rate_edit(request, pk, m, s, b, src):
@@ -53,45 +37,66 @@ def rate_edit(request, pk, m, s, b, src):
     rate.buy = b
     rate.source = src
     rate.save()
-    return HttpResponseRedirect('/currency/rate/list/')
+    # return HttpResponseRedirect(reverse('currency_app:rate-list'))
+    return redirect('currency_app:rate-list')
 
 
 def rate_delete_single(request, pk):
     instance = get_object_or_404(Rate, pk=pk) # noqa
     Rate.objects.filter(id=pk).delete()
-    return HttpResponseRedirect('/currency/rate/list/')
+    # return HttpResponseRedirect(reverse('currency_app:rate-list'))
+    return redirect('currency_app:rate-list')
 
 
-def bank_list(request):
-    if request.method == 'POST':
-        form_data = request.POST
-        form = BankForm(form_data)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/currency/bank/list/')
-    elif request.method == 'GET':
-        form = BankForm()
+class BankList(ListView):
+    model = Bank
+    fields = (
+        'name',
+        'url',
+    )
+    template_name = 'bank_list.html'
+    success_url = reverse_lazy('currency_app:bank-list')
+
+
+class BankCreate(CreateView):
+    model = Bank
+    fields = (
+        'name',
+        'url',
+    )
+    template_name = 'bank_create.html'
+    success_url = reverse_lazy('currency_app:bank-list')
+
+
+class BankReadSingle(DetailView):
+    model = Bank
+    template_name = 'bank_read_single.html'
+    success_url = reverse_lazy('currency_app:bank-list')
+
+
+class BankUpdateSingle(UpdateView):
     queryset = Bank.objects.all()
-    context = {
-        'ls': queryset,
-        'form': form,
-    }
-    return render(request, 'bank_list.html', context=context)
+    template_name = 'bank_update_single.html'
+    success_url = reverse_lazy('currency_app:bank-list')
+    form_class = BankForm
 
 
-def bank_edit(request, pk, npk, upk):
-    instance = get_object_or_404(Bank, pk=pk) # noqa
-    bank = Bank.objects.get(id=pk)
-    bank.name = npk
-    bank.url = urllib.parse.unquote(upk)
-    bank.save()
-    return HttpResponseRedirect('/currency/bank/list/')
+class BankDeleteSingle(DeleteView):
+    model = Bank
+    queryset = Bank.objects.all()
+    template_name = 'bank_delete_single.html'
+    success_url = reverse_lazy('currency_app:bank-list')
 
 
-def bank_delete(request, pk):
-    instance = get_object_or_404(Bank, pk=pk) # noqa
-    Bank.objects.filter(id=pk).delete()
-    return HttpResponseRedirect('/currency/bank/list/')
+class ContactUsCreate(CreateView):
+    model = ContactUs
+    fields = (
+        'email_from',
+        'subject',
+        'message',
+    )
+    template_name = 'contact_us_create.html'
+    success_url = reverse_lazy('index')
 
 
 def contact_us_list(request):
@@ -105,4 +110,11 @@ def contact_us_list(request):
 def contact_us_delete(request, pk):
     instance = get_object_or_404(ContactUs, pk=pk)  # noqa
     ContactUs.objects.filter(id=pk).delete()
-    return HttpResponseRedirect('/currency/сontact_us/list/')
+    # return HttpResponseRedirect(reverse('currency_app:contact_us_list'))
+    return redirect('currency_app:contact_us_list')
+
+
+# html shrinked and resued
+#
+#
+# createview не имеет првоерки на инпут(который был дефолтный при создании формы вручную)?
