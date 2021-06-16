@@ -1,20 +1,18 @@
 {% extends 'template.html' %}
 {% block body_content %}
-<script>
-   function append_css() {
-   document.getElementById("id_email_from").classList.add("form-control");
-   document.getElementById("id_subject").classList.add("form-control");
-   document.getElementById("id_message").classList.add("form-control");
-   }
-</script>
-<body onload="append_css()">
-   <form id="form" method="post">
-      <div class="mb-3">
-         {% csrf_token %}
-         {{ form.as_p }}
+{% load crispy_forms_tags %}
+<body>
+   <div class="card" style="width: 18rem; margin:0 auto">
+      <div class="card-body">
+         <form id="form" method="post">
+            <div class="mb-3">
+               {% csrf_token %}
+               {{ form|crispy }}
+            </div>
+            <div class="modal-footer d-block"><button type="submit" class="btn btn-warning float-end">Send</button></div>
+         </form>
       </div>
-      <div class="modal-footer d-block"><button type="submit" class="btn btn-warning float-end">Send</button></div>
-   </form>
-   {% endblock body_content %}
+   </div>
+{% endblock body_content %}
 </body>
 </html>

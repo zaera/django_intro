@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +46,10 @@ INSTALLED_APPS = [
     "bootstrap5",
     'bootstrap_modal_forms',
     'debug_toolbar',
+    'anymail',
+    'rangefilter',
+    'import_export',
+    'crispy_forms',
 
     'currency_app',
 ]
@@ -143,3 +151,12 @@ XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+# sendinblue.com
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": os.environ.get('SENDINBLUE_API_KEY'),
+}
+EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'  # or sendgrid.EmailBackend, or...
+DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have this in settings
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

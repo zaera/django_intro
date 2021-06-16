@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from currency_app.models import Rate, Bank, ContactUs
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
 from currency_app.forms import BankForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def handler404(request, exception, template_name="index.html"):
@@ -40,8 +42,7 @@ def rate_edit(request, pk, m, s, b, src):
 
 
 def rate_delete_single(request, pk):
-    instance = get_object_or_404(Rate, pk=pk) # noqa
-    Rate.objects.filter(id=pk).delete()
+    Rate.objects.filter(pk=pk).delete()
     # return HttpResponseRedirect(reverse('currency_app:rate-list'))
     return redirect('currency_app:rate-list')
 
@@ -96,6 +97,18 @@ class ContactUsCreate(CreateView):
     )
     template_name = 'contact_us_create.html'
     success_url = reverse_lazy('index')
+    #                               Called only when this view is called
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        send_mail(
+            data['subject'],
+            'Thank you for your attention!\nWe will get back shortly with the answer to you!',
+            settings.DEFAULT_FROM_EMAIL,
+            [data['email_from']],
+            fail_silently=False,
+        )
+        return super().form_valid(form)
 
 
 def contact_us_list(request):
@@ -107,7 +120,5 @@ def contact_us_list(request):
 
 
 def contact_us_delete(request, pk):
-    instance = get_object_or_404(ContactUs, pk=pk)  # noqa
-    ContactUs.objects.filter(id=pk).delete()
-    # return HttpResponseRedirect(reverse('currency_app:contact_us_list'))
+    ContactUs.objects.filter(pk=pk).delete()
     return redirect('currency_app:contact_us_list')
