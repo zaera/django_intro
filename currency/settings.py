@@ -160,3 +160,5 @@ EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'  # or sendgrid.EmailB
 DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have this in settings
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CELERY_BROKER_URL = 'amqp://127.0.0.1'
