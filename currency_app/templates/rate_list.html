@@ -35,6 +35,10 @@
                   <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
                   {% elif ls_element.source == "monobank" %}
                   <img class="pic" width="50" src="{% static 'monobank.png' %}">
+                  {% elif ls_element.source == "kredobank" %}
+                  <img class="pic" width="50" src="{% static 'kredobank.png' %}">
+                  {% elif ls_element.source == "abank" %}
+                  <img class="pic" width="50" src="{% static 'abank.png' %}">
                   {% else %}
                   <img class="pic" width="50" src="{% static 'no_image.png' %}">
                   {% endif %}
