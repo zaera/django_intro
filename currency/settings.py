@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 import environ
+from celery import Celery
+from celery.schedules import crontab
 
 env = environ.Env()
 environ.Env.read_env()
@@ -162,3 +164,10 @@ DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CELERY_BROKER_URL = 'amqp://127.0.0.1'
+
+CELERY_BEAT_SCHEDULE = {
+    'get_currency': {
+        'task': 'currency_app.tasks.get_currency',
+        'schedule': crontab(minute='*/2'),
+    },
+}

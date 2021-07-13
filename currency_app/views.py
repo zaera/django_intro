@@ -4,6 +4,7 @@ from currency_app.models import Rate, Bank, ContactUs
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
 from currency_app.forms import BankForm
 from currency_app.tasks import send_mail_in_bckg
+import requests
 
 
 def handler404(request, exception, template_name="index.html"):
@@ -13,8 +14,6 @@ def handler404(request, exception, template_name="index.html"):
 
 
 def index_page(request):
-    # from .tasks import print_hello
-    # print_hello.delay()
     return render(request, 'index.html')
 
 
