@@ -3,11 +3,29 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
+def add_rate(source, buy, sale, moneytype):
+    from currency_app.models import Rate
+    from decimal import Decimal
+    prev_rate = Rate.objects.filter(
+        source=source,
+        moneytype=moneytype
+    ).order_by('created').last()
+    if (
+            prev_rate is None
+            or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
+            or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
+    ):
+        Rate.objects.create(
+            buy=buy,
+            sale=sale,
+            moneytype=moneytype,
+            source=source,
+        )
+
+
 @shared_task
 def get_currency():
-    from currency_app.models import Rate
     import requests
-    from decimal import Decimal
     # PRIVATBANK
     url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
     response = requests.get(url)
@@ -20,17 +38,7 @@ def get_currency():
             buy = i['buy']
             sale = i['sale']
             moneytype = i['ccy']
-            prev_rate = Rate.objects.filter(source=source, moneytype=moneytype).order_by('created').last()
-            if (
-                    prev_rate is None
-                    or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
-                    or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
-            ):                Rate.objects.create(
-                    buy=buy,
-                    sale=sale,
-                    moneytype=moneytype,
-                    source=source,
-                )
+            add_rate(source, buy, sale, moneytype)
     # MONOBANK
     url = 'https://api.monobank.ua/bank/currency'
     response = requests.get(url)
@@ -47,18 +55,7 @@ def get_currency():
                     moneytype = 'USD'
                 elif i['currencyCodeA'] == 978:
                     moneytype = 'EUR'
-                prev_rate = Rate.objects.filter(source=source, moneytype=moneytype).order_by('created').last()
-                if (
-                        prev_rate is None
-                        or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
-                        or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
-                ):
-                    Rate.objects.create(
-                        buy=buy,
-                        sale=sale,
-                        moneytype=moneytype,
-                        source=source,
-                    )
+                add_rate(source, buy, sale, moneytype)
     # VKURSE
     url = 'http://vkurse.dp.ua/course.json'
     response = requests.get(url)
@@ -68,26 +65,13 @@ def get_currency():
     source = 'vkurse'
     for i in currencies:
         if i in needed:
-            type = i
-            if type in needed:
-                buy = currencies.get(i, {})['buy']
-                sale = currencies.get(i, {})['sale']
-                if i == 'Dollar':
-                    moneytype = 'USD'
-                elif i == 'Euro':
-                    moneytype = 'EUR'
-                prev_rate = Rate.objects.filter(source=source, moneytype=moneytype).order_by('created').last()
-                if (
-                        prev_rate is None
-                        or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
-                        or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
-                ):
-                    Rate.objects.create(
-                        buy=buy,
-                        sale=sale,
-                        moneytype=moneytype,
-                        source=source,
-                    )
+            buy = currencies.get(i, {})['buy']
+            sale = currencies.get(i, {})['sale']
+            if i == 'Dollar':
+                moneytype = 'USD'
+            elif i == 'Euro':
+                moneytype = 'EUR'
+            add_rate(source, buy, sale, moneytype)
     # ABANK
     url = 'https://a-bank.com.ua/backend/api/v1/rates'
     response = requests.get(url)
@@ -100,21 +84,10 @@ def get_currency():
         if i['ccyA'] in needed and i['ccyB'] in needed:
             if i['ccyB'] == 'UAH':
                 buy = i['rateB']
-            if i['ccyB'] == 'USD' or i['ccyB'] == 'EUR':
+            else:
                 sale = i['rateA']
                 moneytype = i['ccyB']
-                prev_rate = Rate.objects.filter(source=source, moneytype=moneytype).order_by('created').last()
-                if (
-                        prev_rate is None
-                        or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
-                        or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
-                ):
-                    Rate.objects.create(
-                        buy=buy,
-                        sale=sale,
-                        moneytype=moneytype,
-                        source=source,
-                    )
+                add_rate(source, buy, sale, moneytype)
     # KREDOBANK
     url_usd_buy = 'https://kredobank.com.ua/api/currencies/commercial/86/buy'
     url_usd_sale = 'https://kredobank.com.ua/api/currencies/commercial/86/sale'
@@ -134,18 +107,7 @@ def get_currency():
 
     moneytype = 'USD'
 
-    prev_rate = Rate.objects.filter(source=source, moneytype=moneytype).order_by('created').last()
-    if (
-            prev_rate is None
-            or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
-            or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
-    ):
-        Rate.objects.create(
-            buy=buy,
-            sale=sale,
-            moneytype=moneytype,
-            source=source,
-        )
+    add_rate(source, buy, sale, moneytype)
 
     response = requests.get(url_eur_buy)
     response.raise_for_status()
@@ -159,18 +121,7 @@ def get_currency():
 
     moneytype = 'EUR'
 
-    prev_rate = Rate.objects.filter(source=source, moneytype=moneytype).order_by('created').last()
-    if (
-            prev_rate is None
-            or prev_rate.sale != Decimal(sale).quantize(Decimal('0.01'))
-            or prev_rate.buy != Decimal(buy).quantize(Decimal('0.01'))
-    ):
-        Rate.objects.create(
-            buy=buy,
-            sale=sale,
-            moneytype=moneytype,
-            source=source,
-        )
+    add_rate(source, buy, sale, moneytype)
 
 
 @shared_task(
@@ -188,15 +139,3 @@ def send_mail_in_bckg(data_subject, data_email_from):
         [data_email_from],
         fail_silently=False,
     )
-
-
-#a-bank
-#https://a-bank.com.ua/backend/api/v1/rates
-
-# kredobank  https://kredobank.com.ua/info/kursy-valyut/commercial
-# USD
-# https://kredobank.com.ua/api/currencies/commercial/86/buy
-# https://kredobank.com.ua/api/currencies/commercial/86/sale
-# EUR
-# https://kredobank.com.ua/api/currencies/commercial/87/buy
-# https://kredobank.com.ua/api/currencies/commercial/87/sale
