@@ -123,7 +123,7 @@ def get_currency():
 
     add_rate(source, buy, sale, moneytype)
     # PIVDENNIY
-    url = 'https://bank.com.ua/api/uk/v1/rest-ui/find-branch-course?date=1626210000'
+    url = 'https://bank.com.ua/api/uk/v1/rest-ui/find-branch-course?date=0'
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
