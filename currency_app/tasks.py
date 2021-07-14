@@ -122,6 +122,19 @@ def get_currency():
     moneytype = 'EUR'
 
     add_rate(source, buy, sale, moneytype)
+    # PIVDENNIY
+    url = 'https://bank.com.ua/api/uk/v1/rest-ui/find-branch-course?date=1626210000'
+    response = requests.get(url)
+    response.raise_for_status()
+    currencies = response.json()
+    source = 'pivd'
+    needed = {'USD', 'EUR'}
+    for i in currencies:
+        if i[1] in needed:
+            buy = i[2]
+            sale = i[3]
+            moneytype = i[1]
+            add_rate(source, buy, sale, moneytype)
 
 
 @shared_task(
