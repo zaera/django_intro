@@ -3,8 +3,7 @@ from django.urls import reverse_lazy
 from currency_app.models import Rate, Bank, ContactUs
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
 from currency_app.forms import BankForm
-from django.core.mail import send_mail
-from django.conf import settings
+from currency_app.tasks import send_mail_in_bckg
 
 
 def handler404(request, exception, template_name="index.html"):
@@ -101,13 +100,7 @@ class ContactUsCreate(CreateView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        send_mail(
-            data['subject'],
-            'Thank you for your attention!\nWe will get back shortly with the answer to you!',
-            settings.DEFAULT_FROM_EMAIL,
-            [data['email_from']],
-            fail_silently=False,
-        )
+        send_mail_in_bckg.delay(data['subject'], data['email_from'])
         return super().form_valid(form)
 
 
