@@ -23,8 +23,7 @@ def add_rate(source, buy, sale, moneytype):
         )
 
 
-@shared_task
-def get_currency():
+def get_pb():
     import requests
     # PRIVATBANK
     url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
@@ -37,8 +36,15 @@ def get_currency():
         if i['ccy'] in needed:
             buy = i['buy']
             sale = i['sale']
-            moneytype = i['ccy']
+            if i['ccy'] == 'USD':
+                moneytype = 0
+            elif i['ccy'] == 'EUR':
+                moneytype = 1
             add_rate(source, buy, sale, moneytype)
+
+
+def get_mono():
+    import requests
     # MONOBANK
     url = 'https://api.monobank.ua/bank/currency'
     response = requests.get(url)
@@ -52,10 +58,14 @@ def get_currency():
                 buy = i['rateBuy']
                 sale = i['rateSell']
                 if i['currencyCodeA'] == 840:
-                    moneytype = 'USD'
+                    moneytype = 0
                 elif i['currencyCodeA'] == 978:
-                    moneytype = 'EUR'
+                    moneytype = 1
                 add_rate(source, buy, sale, moneytype)
+
+
+def get_vkurse():
+    import requests
     # VKURSE
     url = 'http://vkurse.dp.ua/course.json'
     response = requests.get(url)
@@ -68,10 +78,14 @@ def get_currency():
             buy = currencies.get(i, {})['buy']
             sale = currencies.get(i, {})['sale']
             if i == 'Dollar':
-                moneytype = 'USD'
+                moneytype = 0
             elif i == 'Euro':
-                moneytype = 'EUR'
+                moneytype = 1
             add_rate(source, buy, sale, moneytype)
+
+
+def get_abank():
+    import requests
     # ABANK
     url = 'https://a-bank.com.ua/backend/api/v1/rates'
     response = requests.get(url)
@@ -86,8 +100,15 @@ def get_currency():
                 buy = i['rateB']
             else:
                 sale = i['rateA']
-                moneytype = i['ccyB']
+                if i['ccyB'] == 'USD':
+                    moneytype = 0
+                elif i['ccyB'] == 'EUR':
+                    moneytype = 1
                 add_rate(source, buy, sale, moneytype)
+
+
+def get_kredo():
+    import requests
     # KREDOBANK
     url_usd_buy = 'https://kredobank.com.ua/api/currencies/commercial/86/buy'
     url_usd_sale = 'https://kredobank.com.ua/api/currencies/commercial/86/sale'
@@ -98,30 +119,34 @@ def get_currency():
     response = requests.get(url_usd_buy)
     response.raise_for_status()
     usd_buy = response.json()
-    buy = float(usd_buy[-1][1]/100)
+    buy = float(usd_buy[-1][1] / 100)
 
     response = requests.get(url_usd_sale)
     response.raise_for_status()
     usd_sale = response.json()
-    sale = float(usd_sale[-1][1]/100)
+    sale = float(usd_sale[-1][1] / 100)
 
-    moneytype = 'USD'
+    moneytype = 0
 
     add_rate(source, buy, sale, moneytype)
 
     response = requests.get(url_eur_buy)
     response.raise_for_status()
     eur_buy = response.json()
-    buy = float(eur_buy[-1][1]/100)
+    buy = float(eur_buy[-1][1] / 100)
 
     response = requests.get(url_eur_sale)
     response.raise_for_status()
     eur_sale = response.json()
-    sale = float(eur_sale[-1][1]/100)
+    sale = float(eur_sale[-1][1] / 100)
 
-    moneytype = 'EUR'
+    moneytype = 1
 
     add_rate(source, buy, sale, moneytype)
+
+
+def get_pivdenniy():
+    import requests
     # PIVDENNIY
     url = 'https://bank.com.ua/api/uk/v1/rest-ui/find-branch-course?date=0'
     response = requests.get(url)
@@ -133,8 +158,22 @@ def get_currency():
         if i[1] in needed:
             buy = i[2]
             sale = i[3]
+            if i[1] == 'USD':
+                moneytype = 0
+            elif i[1] == 'EUR':
+                moneytype = 1
             moneytype = i[1]
             add_rate(source, buy, sale, moneytype)
+
+
+@shared_task
+def get_currency():
+    get_pb()
+    get_mono()
+    get_vkurse()
+    get_abank()
+    get_kredo()
+    get_pivdenniy()
 
 
 @shared_task(

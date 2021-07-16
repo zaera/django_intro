@@ -19,9 +19,9 @@
             {% for ls_element in object_list %}
             <tr>
                <td class="align-middle" scope="row"><small>{{ls_element.created}}</td>
-               {% if ls_element.moneytype == "USD" %}
+               {% if ls_element.moneytype == 0 %}
                <td><img width="50" src="{% static 'usd.png' %}"></td>
-               {% elif ls_element.moneytype == "EUR" %}
+               {% elif ls_element.moneytype == 1 %}
                <td><img width="50" src="{% static 'eur.png' %}"></td>
                {% endif %}
 
