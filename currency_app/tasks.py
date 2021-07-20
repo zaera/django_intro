@@ -1,7 +1,7 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
-from currency_app import consts
+from currency_app import consts, choices
 
 
 def add_rate(source, buy, sale, moneytype):
@@ -40,9 +40,9 @@ def get_pb():
             buy = i['buy']
             sale = i['sale']
             if i['ccy'] == 'USD':
-                moneytype = 0
+                moneytype = choices.RATE_TYPE_USD
             elif i['ccy'] == 'EUR':
-                moneytype = 1
+                moneytype = choices.RATE_TYPE_EUR
             add_rate(source, buy, sale, moneytype)
 
 
@@ -62,9 +62,9 @@ def get_mono():
                 buy = i['rateBuy']
                 sale = i['rateSell']
                 if i['currencyCodeA'] == 840:
-                    moneytype = 0
+                    moneytype = choices.RATE_TYPE_USD
                 elif i['currencyCodeA'] == 978:
-                    moneytype = 1
+                    moneytype = choices.RATE_TYPE_EUR
                 add_rate(source, buy, sale, moneytype)
 
 
@@ -83,9 +83,9 @@ def get_vkurse():
             buy = currencies.get(i, {})['buy']
             sale = currencies.get(i, {})['sale']
             if i == 'Dollar':
-                moneytype = 0
+                moneytype = choices.RATE_TYPE_USD
             elif i == 'Euro':
-                moneytype = 1
+                moneytype = choices.RATE_TYPE_EUR
             add_rate(source, buy, sale, moneytype)
 
 
@@ -107,9 +107,9 @@ def get_abank():
             else:
                 sale = i['rateA']
                 if i['ccyB'] == 'USD':
-                    moneytype = 0
+                    moneytype = choices.RATE_TYPE_USD
                 elif i['ccyB'] == 'EUR':
-                    moneytype = 1
+                    moneytype = choices.RATE_TYPE_EUR
                 add_rate(source, buy, sale, moneytype)
 
 
@@ -134,7 +134,7 @@ def get_kredo():
     usd_sale = response.json()
     sale = float(usd_sale[-1][1] / 100)
 
-    moneytype = 0
+    moneytype = choices.RATE_TYPE_USD
 
     add_rate(source, buy, sale, moneytype)
 
@@ -148,7 +148,7 @@ def get_kredo():
     eur_sale = response.json()
     sale = float(eur_sale[-1][1] / 100)
 
-    moneytype = 1
+    moneytype = choices.RATE_TYPE_EUR
 
     add_rate(source, buy, sale, moneytype)
 
@@ -168,9 +168,9 @@ def get_pivdenniy():
             buy = i[2]
             sale = i[3]
             if i[1] == 'USD':
-                moneytype = 0
+                moneytype = choices.RATE_TYPE_USD
             elif i[1] == 'EUR':
-                moneytype = 1
+                moneytype = choices.RATE_TYPE_EUR
             add_rate(source, buy, sale, moneytype)
 
 
