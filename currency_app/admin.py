@@ -23,14 +23,14 @@ class RateResource(resources.ModelResource):
 
 
 class RateAdmin(ImportExportModelAdmin):
-    list_display = ('moneytype', 'sale', 'buy', 'created', 'source')
-    list_filter = ('moneytype', ('created', DateTimeRangeFilter), 'source')
-    search_fields = ('source', 'moneytype', 'sale', 'buy',)
+    list_display = ('moneytype', 'sale', 'buy', 'created', 'bank')
+    list_filter = ('moneytype', ('created', DateTimeRangeFilter), 'bank')
+    search_fields = ('bank', 'moneytype', 'sale', 'buy',)
     resource_class = RateResource
 
 
 class BankAdmin(admin.ModelAdmin):
-    list_display = ('name', 'url')
+    list_display = ('name', 'url', 'origin_url', 'code_name')
     list_filter = ('name',)
     search_fields = ('name', 'url',)
 

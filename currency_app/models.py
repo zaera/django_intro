@@ -2,12 +2,25 @@ from django.db import models
 from currency_app import choices
 
 
+class Bank(models.Model):
+    name = models.CharField(max_length=64)
+    code_name = models.CharField(max_length=64, unique=True)
+    url = models.URLField()
+    origin_url = models.URLField()
+
+
 class Rate(models.Model):
     moneytype = models.PositiveSmallIntegerField(choices=choices.RATE_TYPE_CHOICES)
     sale = models.DecimalField(max_digits=5, decimal_places=2)
     buy = models.DecimalField(max_digits=5, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
-    source = models.CharField(max_length=64)
+    bank = models.ForeignKey(
+        Bank,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return f'Rate id: {self.id}'
 
 
 class ContactUs(models.Model):
@@ -15,11 +28,6 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=255)
     message = models.CharField(max_length=500)
     created = models.DateTimeField(auto_now_add=True)
-
-
-class Bank(models.Model):
-    name = models.CharField(max_length=255)
-    url = models.CharField(max_length=255)
 
 
 class Analytics(models.Model):

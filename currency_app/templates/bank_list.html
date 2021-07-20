@@ -8,7 +8,8 @@
             <tr>
                <th scope="col"></th>
                <th scope="col">Bank</th>
-               <th scope="col">Link</th>
+                <th scope="col">Url origin</th>
+               <th scope="col">Url</th>
                <th scope="col">
                   <!-- <button type="button" class="btn btn-success">Add new</button>  -->
                </th>
@@ -24,16 +25,21 @@
                   <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
                   {% elif ls_element.name == "Monobank" %}
                   <img class="pic" width="50" src="{% static 'monobank.png' %}">
-                  {% elif ls_element.name == "Alphabank" %}
-                  <img class="pic" width="50" src="{% static 'alpha.png' %}">
-                  {% elif ls_element.name == "Raiffeisenbank" %}
-                  <img class="pic" width="50" src="{% static 'reiff.png' %}">
+                  {% elif ls_element.name == "Abank" %}
+                  <img class="pic" width="50" src="{% static 'abank.png' %}">
+                  {% elif ls_element.name == "Kredobank" %}
+                  <img class="pic" width="50" src="{% static 'kredobank.png' %}">
+                  {% elif ls_element.name == "Pivdenniy" %}
+                  <img class="pic" width="50" src="{% static 'pivd.png' %}">
                   {% else %}
                   <img class="pic" width="50" src="{% static 'no_image.png' %}">
                   {% endif %}
                </td>
                <td class="text-truncate align-middle">
                   {{ ls_element.name }}
+               </td>
+               <td  class="text-truncate align-middle col-md-2">
+                  <a href="{{ls_element.origin_url}}" target="blank">{{ls_element.origin_url}}</a>
                </td>
                <td  class="text-truncate align-middle col-md-2">
                   <a href="{{ls_element.url}}" target="blank">{{ls_element.url}}</a>
