@@ -1,9 +1,9 @@
 from django.db import models
-# Create your models here.
+from currency_app import choices
 
 
 class Rate(models.Model):
-    moneytype = models.CharField(max_length=5)
+    moneytype = models.PositiveSmallIntegerField(choices=choices.RATE_TYPE_CHOICES)
     sale = models.DecimalField(max_digits=5, decimal_places=2)
     buy = models.DecimalField(max_digits=5, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
@@ -15,13 +15,20 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=255)
     message = models.CharField(max_length=500)
     created = models.DateTimeField(auto_now_add=True)
-    #                               Do when any class called anywhere
-
-    # def save(self, *args, **kwargs):
-    #     print('here\n' * 10)
-    #     return super().save(*args, **kwargs)
 
 
 class Bank(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
+
+
+class Analytics(models.Model):
+    path = models.CharField(max_length=255)
+    counter = models.PositiveBigIntegerField()
+    request_method = models.PositiveSmallIntegerField(choices=choices.REQUEST_METHOD_CHOICES)
+    status_code = models.CharField(max_length=3)
+
+    class Meta:
+        unique_together = [
+            ['path', 'request_method']
+        ]

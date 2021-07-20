@@ -1,9 +1,19 @@
 from django.contrib import admin
-from .models import Rate, Bank, ContactUs
+from .models import Rate, Bank, ContactUs, Analytics
 from rangefilter.filters import DateTimeRangeFilter
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-# Register your models here.
+
+
+class AnalyticsResource(resources.ModelResource):
+
+    class Meta:
+        model = Analytics
+
+
+class AnalyticsAdmin(ImportExportModelAdmin):
+    list_display = ('path', 'counter', 'request_method', 'status_code')
+    resource_class = AnalyticsResource
 
 
 class RateResource(resources.ModelResource):
@@ -44,6 +54,8 @@ class ContactUsAdmin(ImportExportModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+
+admin.site.register(Analytics, AnalyticsAdmin)
 
 admin.site.register(Rate, RateAdmin)
 
