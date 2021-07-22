@@ -17,19 +17,29 @@
                 <a href="{% url 'currency_app:contact_us_list' %}" class="btn btn-primary">Messages</a>
             <p>
             <p>
-
-                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-            <p>
-            <p>
-                <a href="#" class="btn btn-primary">Sign Up</a>
                 {% if request.user.is_authenticated %}
                     <p>
                     <p>
                         <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
                     <p>
                     <p>
-                    <a href="{% url 'accounts:profile'%}" class="btn btn-primary">Profile</a>
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-primary">Profile</a>
+                        <p>
+                    <p>
+                        <a href="{% url 'accounts:change-password' %}" class="btn btn-primary">Change Password</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                    <p>
+                    <p>
+
+                        <a href="#" class="btn btn-primary">Sign Up</a>
+                    <p>
+                    <p>
+                        <a href="{% url 'password_reset' %}" class="btn btn-primary">Forgot your password?</a>
+                    <p>
+                    <p>
                 {% endif %}
+
         </div>
         <div class="card-footer text-muted">
             2 days ago

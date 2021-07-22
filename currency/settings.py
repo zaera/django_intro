@@ -179,4 +179,5 @@ AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 
+
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only
