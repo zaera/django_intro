@@ -22,9 +22,10 @@ class Ratelist(ListView):
         'moneytype',
         'sale',
         'buy',
-        'source',
+        'bank',
     )
     template_name = 'rate_list.html'
+    queryset = Rate.objects.all().select_related('bank')
     success_url = reverse_lazy('rate-list')
 
 
@@ -34,7 +35,8 @@ def rate_edit(request, pk, m, s, b, src):
     rate.moneytype = m
     rate.sale = s
     rate.buy = b
-    rate.source = src
+    bank = Bank.objects.get(name=src)
+    rate.bank = bank
     rate.save()
     # return HttpResponseRedirect(reverse('currency_app:rate-list'))
     return redirect('currency_app:rate-list')

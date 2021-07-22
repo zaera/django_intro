@@ -1,14 +1,17 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
+from currency_app import consts, choices
 
 
 def add_rate(source, buy, sale, moneytype):
-    from currency_app.models import Rate
+    from currency_app.models import Rate, Bank
     from decimal import Decimal
+    bank = Bank.objects.get(code_name=source)
     prev_rate = Rate.objects.filter(
-        source=source,
-        moneytype=moneytype
+        bank=bank,
+        moneytype=moneytype,
+
     ).order_by('created').last()
     if (
             prev_rate is None
@@ -19,80 +22,83 @@ def add_rate(source, buy, sale, moneytype):
             buy=buy,
             sale=sale,
             moneytype=moneytype,
-            source=source,
+            bank=bank,
         )
 
 
 def get_pb():
+    from currency_app.models import Bank
+    source = consts.CODE_NAME_PRIVATBANK
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
     import requests
-    # PRIVATBANK
-    url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
-    response = requests.get(url)
+    response = requests.get(bank.url)
     response.raise_for_status()
     currencies = response.json()
     needed = {'USD', 'EUR'}
-    source = 'privatbank'
     for i in currencies:
         if i['ccy'] in needed:
             buy = i['buy']
             sale = i['sale']
             if i['ccy'] == 'USD':
-                moneytype = 0
+                moneytype = choices.RATE_TYPE_USD
             elif i['ccy'] == 'EUR':
-                moneytype = 1
+                moneytype = choices.RATE_TYPE_EUR
             add_rate(source, buy, sale, moneytype)
 
 
 def get_mono():
     import requests
-    # MONOBANK
-    url = 'https://api.monobank.ua/bank/currency'
-    response = requests.get(url)
+    from currency_app.models import Bank
+    source = consts.CODE_NAME_MONOBANK
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_MONOBANK)
+    response = requests.get(bank.url)
     response.raise_for_status()
     currencies = response.json()
     needed = {840, 978}
-    source = 'monobank'
+    source = consts.CODE_NAME_MONOBANK
     for i in currencies:
         if i['currencyCodeA'] in needed:
             if i['currencyCodeB'] == 980:
                 buy = i['rateBuy']
                 sale = i['rateSell']
                 if i['currencyCodeA'] == 840:
-                    moneytype = 0
+                    moneytype = choices.RATE_TYPE_USD
                 elif i['currencyCodeA'] == 978:
-                    moneytype = 1
+                    moneytype = choices.RATE_TYPE_EUR
                 add_rate(source, buy, sale, moneytype)
 
 
 def get_vkurse():
     import requests
-    # VKURSE
-    url = 'http://vkurse.dp.ua/course.json'
-    response = requests.get(url)
+    from currency_app.models import Bank
+    source = consts.CODE_NAME_VKURSE
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_VKURSE)
+    response = requests.get(bank.url)
     response.raise_for_status()
     currencies = response.json()
     needed = {'Dollar', 'Euro'}
-    source = 'vkurse'
+    source = consts.CODE_NAME_VKURSE
     for i in currencies:
         if i in needed:
             buy = currencies.get(i, {})['buy']
             sale = currencies.get(i, {})['sale']
             if i == 'Dollar':
-                moneytype = 0
+                moneytype = choices.RATE_TYPE_USD
             elif i == 'Euro':
-                moneytype = 1
+                moneytype = choices.RATE_TYPE_EUR
             add_rate(source, buy, sale, moneytype)
 
 
 def get_abank():
     import requests
-    # ABANK
-    url = 'https://a-bank.com.ua/backend/api/v1/rates'
-    response = requests.get(url)
+    from currency_app.models import Bank
+    source = consts.CODE_NAME_ABANK
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_ABANK)
+    response = requests.get(bank.url)
     response.raise_for_status()
     currencies = response.json()
     needed = {'USD', 'EUR', 'UAH'}
-    source = 'abank'
+    source = consts.CODE_NAME_ABANK
     tmp = currencies['data']
     for i in tmp:
         if i['ccyA'] in needed and i['ccyB'] in needed:
@@ -101,20 +107,22 @@ def get_abank():
             else:
                 sale = i['rateA']
                 if i['ccyB'] == 'USD':
-                    moneytype = 0
+                    moneytype = choices.RATE_TYPE_USD
                 elif i['ccyB'] == 'EUR':
-                    moneytype = 1
+                    moneytype = choices.RATE_TYPE_EUR
                 add_rate(source, buy, sale, moneytype)
 
 
 def get_kredo():
     import requests
-    # KREDOBANK
-    url_usd_buy = 'https://kredobank.com.ua/api/currencies/commercial/86/buy'
-    url_usd_sale = 'https://kredobank.com.ua/api/currencies/commercial/86/sale'
-    url_eur_buy = 'https://kredobank.com.ua/api/currencies/commercial/87/buy'
-    url_eur_sale = 'https://kredobank.com.ua/api/currencies/commercial/87/sale'
-    source = 'kredobank'
+    from currency_app.models import Bank
+    source = consts.CODE_NAME_KREDOBANK
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_KREDOBANK)
+    url_usd_buy = bank.url + '86/buy'
+    url_usd_sale = bank.url + '86/sale'
+    url_eur_buy = bank.url + '87/buy'
+    url_eur_sale = bank.url + '87/sale'
+    source = consts.CODE_NAME_KREDOBANK
 
     response = requests.get(url_usd_buy)
     response.raise_for_status()
@@ -126,7 +134,7 @@ def get_kredo():
     usd_sale = response.json()
     sale = float(usd_sale[-1][1] / 100)
 
-    moneytype = 0
+    moneytype = choices.RATE_TYPE_USD
 
     add_rate(source, buy, sale, moneytype)
 
@@ -140,29 +148,29 @@ def get_kredo():
     eur_sale = response.json()
     sale = float(eur_sale[-1][1] / 100)
 
-    moneytype = 1
+    moneytype = choices.RATE_TYPE_EUR
 
     add_rate(source, buy, sale, moneytype)
 
 
 def get_pivdenniy():
     import requests
-    # PIVDENNIY
-    url = 'https://bank.com.ua/api/uk/v1/rest-ui/find-branch-course?date=0'
-    response = requests.get(url)
+    from currency_app.models import Bank
+    source = consts.CODE_NAME_PIVDENNIY
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_PIVDENNIY)
+    response = requests.get(bank.url)
     response.raise_for_status()
     currencies = response.json()
-    source = 'pivd'
+    source = consts.CODE_NAME_PIVDENNIY
     needed = {'USD', 'EUR'}
     for i in currencies:
         if i[1] in needed:
             buy = i[2]
             sale = i[3]
             if i[1] == 'USD':
-                moneytype = 0
+                moneytype = choices.RATE_TYPE_USD
             elif i[1] == 'EUR':
-                moneytype = 1
-            moneytype = i[1]
+                moneytype = choices.RATE_TYPE_EUR
             add_rate(source, buy, sale, moneytype)
 
 

@@ -8,6 +8,7 @@ class BankForm(forms.ModelForm):
         fields = (
             'name',
             'url',
+            'origin_url',
         )
 
 
@@ -18,7 +19,7 @@ class RateForm(forms.ModelForm):
             'moneytype',
             'sale',
             'buy',
-            'source',
+            'bank',
         )
 
 

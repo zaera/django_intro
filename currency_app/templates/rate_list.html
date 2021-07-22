@@ -9,7 +9,7 @@
                <th scope="col">Date</th>
                <th scope="col">Type</th>
                <th scope="col">Sale/Buy</th>
-               <th scope="col">Source</th>
+               <th scope="col">Bank</th>
                <th scope="col">
                   <!-- <button type="button" class="btn btn-success">Add new</button>  -->
                </th>
@@ -18,32 +18,32 @@
          <tbody>
             {% for ls_element in object_list %}
             <tr>
-               <td class="align-middle" scope="row"><small>{{ls_element.created}}</td>
+               <td class="align-middle" scope="row"><small>{{ls_element.created}}</small></td>
                {% if ls_element.moneytype == 0 %}
                <td><img width="50" src="{% static 'usd.png' %}"></td>
                {% elif ls_element.moneytype == 1 %}
                <td><img width="50" src="{% static 'eur.png' %}"></td>
                {% endif %}
-
+                </td>
                <td class="align-middle"><strong><b>{{ls_element.sale}} /
                   {{ls_element.buy}}
-               </td>
                <td><i>
-                  {% if ls_element.source == "vkurse" %}
+                  {% if ls_element.bank.code_name == "vkurse" %}
                   <img class="pic" width="50" src="{% static 'vkurse.jpg' %}">
-                  {% elif ls_element.source == "privatbank" %}
+                  {% elif ls_element.bank.code_name == "privatbank" %}
                   <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
-                  {% elif ls_element.source == "monobank" %}
+                  {% elif ls_element.bank.code_name == "monobank" %}
                   <img class="pic" width="50" src="{% static 'monobank.png' %}">
-                  {% elif ls_element.source == "kredobank" %}
+                  {% elif ls_element.bank.code_name == "kredobank" %}
                   <img class="pic" width="50" src="{% static 'kredobank.png' %}">
-                  {% elif ls_element.source == "abank" %}
+                  {% elif ls_element.bank.code_name == "abank" %}
                   <img class="pic" width="50" src="{% static 'abank.png' %}">
-                  {% elif ls_element.source == "pivd" %}
+                  {% elif ls_element.bank.code_name == 'pivdenniy' %}
                   <img class="pic" width="50" src="{% static 'pivd.png' %}">
                   {% else %}
                   <img class="pic" width="50" src="{% static 'no_image.png' %}">
                   {% endif %}
+               </i>
                </td>
                <td class="align-middle">
                   <button id='{{ls_element.id}}' type="button" class="btn btn-warning" data-toggle="modal" data-target="#Modal" data-id="{{ls_element.id}}" data-action="view"><i class="fas fa-eye"></i></button>
@@ -55,7 +55,6 @@
    </div>
 </div>
 </table>
-<a class="contact"> <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Modal" data-id="" data-action="create"><i class="fas fa-plus-circle"></i></button></a>
 <!-- Modal -->
 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
@@ -81,25 +80,29 @@
    let sale = []
    let buy=[]
    let created=[]
-   let source=[]
+   let bank=[]
        {% for ls_element in object_list %}
    ids.push('{{ls_element.id}}')
    moneytype.push('{{ls_element.moneytype}}')
    sale.push('{{ls_element.sale}}')
    buy.push('{{ls_element.buy}}')
    created.push('{{ls_element.created}}')
-   source.push('{{ls_element.source}}')
+   bank.push('{{ls_element.bank.name}}')
      {% endfor%}
     $('.modal').on('shown.bs.modal', function (e) {
-      var action = $(e.relatedTarget).data('action');
+      let action = $(e.relatedTarget).data('action');
    if (action == 'view') {
      document.getElementById('ModalLabel').innerHTML = 'View'
-   var id = $(e.relatedTarget).data('id');
-     for (var i=0; i<ids.length; i++) {
+   let id = $(e.relatedTarget).data('id');
+     for (let i=0; i<ids.length; i++) {
        if (ids[i] == id) {
          id = i
        }
      }
+     if (moneytype[id] == 0)
+     {moneytype[id]='USD'}
+     else if (moneytype[id] == 1)
+     {moneytype[id]='EUR'}
      $( "#modalbody" ).append('<div class="card">\n' +
              '  <div class="card-header">\n' +
              '    '+moneytype[id]+'\n' +
@@ -107,30 +110,18 @@
              '  <ul class="list-group list-group-flush">\n' +
              '    <li class="list-group-item">'+ buy[id]+'/'+sale[id]+'</li>\n' +
              '    <li class="list-group-item">'+ created[id]+'</li>\n' +
-             '    <li class="list-group-item">'+ source[id]+'</li>\n' +
+             '    <li class="list-group-item">'+ bank[id]+'</li>\n' +
              '  </ul>\n' +
              '</div>'+
              '<div class="modal-footer d-block">' +
              '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
              '</div>');
    }
-      else if (action == 'create') {
-     document.getElementById('ModalLabel').innerHTML = 'Add new'
-     $('#modalbody').append('<form id="form" method="post"><div class="mb-3">' +
-                            `{% csrf_token %}{{form.as_p}}` +
-                           '</div><div class="modal-footer d-block"><button type="submit" class="btn btn-warning float-end">Add</button> ' +
-                           '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button></div></form>');
-     document.getElementById("id_moneytype").classList.add("form-control");
-     document.getElementById("id_sale").classList.add("form-control");
-     document.getElementById("id_buy").classList.add("form-control");
-     document.getElementById("id_source").classList.add("form-control");
-   }
-
       else if (action == 'update') {
      document.getElementById('ModalLabel').innerHTML = 'Update'
-         var id = $(e.relatedTarget).data('id');
-     var original_id = id
-     for (var i=0; i<ids.length; i++) {
+         let id = $(e.relatedTarget).data('id');
+     let original_id = id
+     for (let i=0; i<ids.length; i++) {
        if (ids[i] == id) {
          id = i
        }
@@ -148,8 +139,8 @@
                     '<label class="form-label">Buy</label>' +
                     '<input type="text" maxlength="255" class="form-control" id="buy" name="subject" required value="'+buy[id]+'"/>' +
                     '</div>' +
-                    '<label class="form-label">Source</label>' +
-                    '<input type="text" maxlength="255" class="form-control" id="source" name="subject" required value="'+source[id]+'"/>' +
+                    '<label class="form-label">Bank</label>' +
+                    '<input type="text" maxlength="255" class="form-control" id="bank" name="subject" required value="'+bank[id]+'"/>' +
                     '</div>' +
                     '<div class="modal-footer d-block">' +
                     '<button type="submit" class="btn btn-warning float-end">Update</button>' +
@@ -160,13 +151,13 @@
    }
     })
       function update(){
-      var id = document.getElementById('data_id').innerHTML;
-      var moneytype = document.getElementById('moneytype').value;
-      var sale = document.getElementById('sale').value;
-      var buy = document.getElementById('buy').value;
-      var source = document.getElementById('source').value;
+      let id = document.getElementById('data_id').innerHTML;
+      let moneytype = document.getElementById('moneytype').value;
+      let sale = document.getElementById('sale').value;
+      let buy = document.getElementById('buy').value;
+      let bank = document.getElementById('bank').value;
       $.ajax({
-         url: '../' + 'edit' + '/' + id + '/'+ moneytype + '/'+ sale + '/'+ buy + '/'+ source + '/',
+         url: '../' + 'edit' + '/' + id + '/'+ moneytype + '/'+ sale + '/'+ buy + '/'+ bank + '/',
          success: function(data){
          }
    })
