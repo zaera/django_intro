@@ -1,8 +1,20 @@
 from django.contrib import admin
 from .models import Rate, Bank, ContactUs, Analytics
+from accounts.models import User
 from rangefilter.filters import DateTimeRangeFilter
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+
+
+class UserResource(resources.ModelResource):
+
+    class Meta:
+        model = User
+
+
+class UserAdmin(ImportExportModelAdmin):
+    list_display = ('username', 'password', 'first_name', 'last_name',)
+    resource_class = UserResource
 
 
 class AnalyticsResource(resources.ModelResource):
@@ -54,6 +66,8 @@ class ContactUsAdmin(ImportExportModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+
+admin.site.register(User, UserAdmin)
 
 admin.site.register(Analytics, AnalyticsAdmin)
 

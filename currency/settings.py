@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import environ
 from celery.schedules import crontab
+from django.urls import reverse_lazy
 
 env = environ.Env()
 environ.Env.read_env()
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'currency_app',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -172,3 +174,9 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/2'),
     },
 }
+
+AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only

@@ -1,5 +1,6 @@
-from currency_app.views import index_page
+from django.conf.urls import url
 
+from currency_app.views import index_page
 from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
@@ -9,4 +10,7 @@ urlpatterns = [
     path('__debug__/', include(debug_toolbar.urls)),
     path('', index_page, name='index'),
     path('currency/', include('currency_app.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('auth/', include('django.contrib.auth.urls')),
+    url('^', include('django.contrib.auth.urls')),
 ]
