@@ -1,44 +1,69 @@
 {% extends 'template.html' %}
 {% block body_content %}
-<div class="card text-center">
-   <div class="card-header">
-      <p>
-      <p>
-   </div>
-   <div class="card-body">
-      <h5 class="card-title">Welcome to currency App</h5>
-      <p class="card-text">Use the following menu to navigate</p>
-      <a href="{% url 'currency_app:rate-list' %}" class="btn btn-primary">Rate list</a>
-      <p>
-      <p>
-         <a href="{% url 'currency_app:bank-list' %}" class="btn btn-primary">Bank list</a>
-      <p>
-      <p>
-         <a href="{% url 'currency_app:contact_us_list' %}" class="btn btn-primary">Messages</a>
-   </div>
-   <div class="card-footer text-muted">
-      2 days ago
-   </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body" id="modalbody">
-         </div>
-      </div>
-   </div>
-</div>
-<!-- Contact US -->
-<a class="contact" href="{% url 'currency_app:contact_us_create' %}">CONTACT US</a>
-<script>
-   document.getElementById("home").classList.add("active");
-   document.title = "Home";
-</script>
+    <div class="card text-center">
+        <div class="card-header">
+            <p>
+            <p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Welcome to currency App</h5>
+            <p class="card-text">Use the following menu to navigate</p>
+            <a href="{% url 'currency_app:rate-list' %}" class="btn btn-primary">Rate list</a>
+            <p>
+            <p>
+                <a href="{% url 'currency_app:bank-list' %}" class="btn btn-primary">Bank list</a>
+            <p>
+            <p>
+                <a href="{% url 'currency_app:contact_us_list' %}" class="btn btn-primary">Messages</a>
+            <p>
+            <p>
+                {% if request.user.is_authenticated %}
+                    <p>
+                    <p>
+                        <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+                    <p>
+                    <p>
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-primary">Profile</a>
+                        <p>
+                    <p>
+                        <a href="{% url 'accounts:change-password' %}" class="btn btn-primary">Change Password</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                    <p>
+                    <p>
+
+                        <a href="#" class="btn btn-primary">Sign Up</a>
+                    <p>
+                    <p>
+                        <a href="{% url 'password_reset' %}" class="btn btn-primary">Forgot your password?</a>
+                    <p>
+                    <p>
+                {% endif %}
+
+        </div>
+        <div class="card-footer text-muted">
+            2 days ago
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalbody">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact US -->
+    <a class="contact" href="{% url 'currency_app:contact_us_create' %}">CONTACT US</a>
+    <script>
+        document.getElementById("home").classList.add("active");
+        document.title = "Home";
+    </script>
 {% endblock body_content %}
