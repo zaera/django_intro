@@ -1,7 +1,17 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, CreateView
 from accounts.models import User
+from accounts.forms import SignUpForm
+
+
+class SignUp(CreateView):
+    model = User
+    template_name = 'signup.html'
+    success_url = reverse_lazy('index')
+    form_class = SignUpForm
+    pass
 
 
 class ChangePassword(PasswordChangeView):
@@ -16,7 +26,7 @@ class ChangePassword(PasswordChangeView):
         return self.request.user
 
 
-class Profile(UpdateView):
+class Profile(LoginRequiredMixin, UpdateView):
     queryset = User.objects.all()
     template_name = 'profile.html'
     success_url = reverse_lazy('index')

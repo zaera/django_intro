@@ -1,0 +1,22 @@
+{% extends 'template.html' %}
+{% block body_content %}
+    {% load crispy_forms_tags %}
+    <body>
+    <div class="card" style="width: 18rem; margin:0 auto">
+        <div class="card-body">
+            <form id="form" method="post">
+                <div class="mb-3">
+                    Sign Up
+                    <p>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                </div>
+                <div class="modal-footer d-block">
+                    <button type="submit" class="btn btn-warning float-end">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body_content %}
+</body>
+</html>
