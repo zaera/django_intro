@@ -179,5 +179,6 @@ AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 
+DOMAIN = 'htttp://127.0.0.1:8000'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only

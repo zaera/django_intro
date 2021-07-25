@@ -11,7 +11,6 @@ class SignUp(CreateView):
     template_name = 'signup.html'
     success_url = reverse_lazy('index')
     form_class = SignUpForm
-    pass
 
 
 class ChangePassword(PasswordChangeView):
