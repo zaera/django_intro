@@ -20,6 +20,7 @@ diff-match-patch==20200713
 distlib==0.3.2
 Django==3.2.3
 django-admin-rangefilter==0.8.1
+django-annoying==0.10.6
 django-anymail==8.3
 django-bootstrap-modal-forms==2.2.0
 django-bootstrap-v5==1.0.4
@@ -58,7 +59,7 @@ pickleshare==0.7.5
 Pillow==8.2.0
 pipdeptree==2.0.0
 pipenv==2021.5.29
-#pkg-resources==0.0.0
+pkg-resources==0.0.0
 prompt-toolkit==2.0.9
 ptyprocess==0.7.0
 pycodestyle==2.7.0

@@ -30,7 +30,6 @@ class SignUpForm(forms.ModelForm):
         cleaned_data = super().clean()
         if not self.errors:
             if cleaned_data['password1'] != cleaned_data['password2']:
-                #self.add_error('password1', 'Passwords do not match.')
                 raise forms.ValidationError('Passwords do not match.')
         return cleaned_data
 
@@ -41,17 +40,14 @@ class SignUpForm(forms.ModelForm):
         instance.username = str(uuid.uuid4())
         instance.is_active = False
         # instance.password = self.cleaned_data['password1']
-        # instance.set_password(self.cleaned_data['password1'])
+        instance.set_password(self.cleaned_data['password1'])
 
         if commit:
             instance.save()
 
         body = f"""
-        Activate Your Account
-        {os.environ.get('DOMAIN')}
-
+        Activate Your Account:
+        {os.environ.get('DOMAIN')}{reverse('accounts:activate', args=(instance.username, ))}
         """
         send_reg_mail.delay(body, instance.email)
         return instance
-
-    #{reverse('account:activate-account', args=(instance.username,))}

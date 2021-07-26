@@ -14,6 +14,7 @@ from pathlib import Path
 import environ
 from celery.schedules import crontab
 from django.urls import reverse_lazy
+from django.contrib.messages import constants as messages
 
 env = environ.Env()
 environ.Env.read_env()
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'rangefilter',
     'import_export',
     'crispy_forms',
+    'annoying',
 
     'currency_app',
     'accounts',
@@ -180,5 +182,13 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 
 DOMAIN = 'htttp://127.0.0.1:8000'
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only
