@@ -3,6 +3,8 @@ from django import forms
 from accounts.models import User
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+import os
+from currency_app.tasks import send_reg_mail
 
 
 class SignUpForm(forms.ModelForm):
@@ -13,8 +15,6 @@ class SignUpForm(forms.ModelForm):
         model = User
         fields = (
             'email',
-            # 'first_name',
-            # 'last_name',
             'password1',
             'password2',
         )
@@ -22,32 +22,36 @@ class SignUpForm(forms.ModelForm):
             'email': mark_safe('&nbsp;&nbsp;E-mail'),
         }
 
-        def clean_email(self):
-            email = self.cleaned_data['email']
-            return email.lower()
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        return email.lower()
 
-        def clean(self):
-            cleaned_data = super().clean()
-            if not self.errors:
-                if cleaned_data['password1'] != cleaned_data['password2']:
-                    # self.add_error('password1', 'Passwords do not match.')
-                    raise forms.ValidationError('Passwords do not match.')
-            return cleaned_data
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.errors:
+            if cleaned_data['password1'] != cleaned_data['password2']:
+                #self.add_error('password1', 'Passwords do not match.')
+                raise forms.ValidationError('Passwords do not match.')
+        return cleaned_data
 
-        def save(self, commit=True):
-            instance = super().save(commit=False)
+    def save(self, commit=True):
+        instance = super().save(commit=False)
 
-            # instance.username = self.cleaned_data['email']
-            instance.username = str(uuid.uuid4())
-            instance.is_active = False
-            # instance.password = self.cleaned_data['password1']
-            instance.set_password(self.cleaned_data['password1'])
+        # instance.username = self.cleaned_data['email']
+        instance.username = str(uuid.uuid4())
+        instance.is_active = False
+        # instance.password = self.cleaned_data['password1']
+        # instance.set_password(self.cleaned_data['password1'])
 
-            if commit:
-                instance.save()
+        if commit:
+            instance.save()
 
-            return instance
+        body = f"""
+        Activate Your Account
+        {os.environ.get('DOMAIN')}
 
+        """
+        send_reg_mail.delay(body, instance.email)
+        return instance
 
-# send_mail_in_bckg.delay(data['subject'], data['email_from'])
-# send_reg_mail(body, data_email_to)
+    #{reverse('account:activate-account', args=(instance.username,))}

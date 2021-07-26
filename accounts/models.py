@@ -3,10 +3,10 @@ from django.db import models
 
 
 class User(AbstractUser):
-     USERNAME_FIELD = 'email'
-     REQUIRED_FIELDS = []
+     # USERNAME_FIELD = 'email'
+     # REQUIRED_FIELDS = []
 
-     email = models.EmailField(
-         'email_address', blank=False, null=False, unique=True,
-     )
-
+     # email = models.EmailField(
+     #     'email_address', blank=False, null=False, unique=True,
+     # )
+    pass

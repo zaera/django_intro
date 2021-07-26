@@ -9,8 +9,8 @@ from accounts.forms import SignUpForm
 class SignUp(CreateView):
     model = User
     template_name = 'signup.html'
-    success_url = reverse_lazy('index')
     form_class = SignUpForm
+    success_url = reverse_lazy('index')
 
 
 class ChangePassword(PasswordChangeView):
