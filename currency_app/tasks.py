@@ -199,3 +199,21 @@ def send_mail_in_bckg(data_subject, data_email_from):
         [data_email_from],
         fail_silently=False,
     )
+
+
+@shared_task(
+    autoretry_for=(Exception,),
+    retry_kwargs={
+        'max_retries': 5,
+        'default_retry_delay': 60,
+    },
+)
+def send_reg_mail(body, data_email_to):
+    title = 'Activate your account'
+    send_mail(
+        title,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [data_email_to],
+        fail_silently=False,
+    )

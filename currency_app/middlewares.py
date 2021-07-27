@@ -10,7 +10,6 @@ class AnalyticsMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
         status_code = getattr(response, 'status_code', None)
-        response = self.get_response(request)
         if response.status_code == 200:
             request_method = choices.REQUEST_METHOD_CHOICES_MAPPER[request.method]
             obj, created = Analytics.objects.get_or_create(
