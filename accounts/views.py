@@ -49,10 +49,10 @@ class SignUp(CreateView):
 class ChangePassword(PasswordChangeView):
     queryset = User.objects.all()
     template_name = 'change_password.html'
-    success_url = reverse_lazy('index')
     fields = (
         'password',
     )
+    success_url = reverse_lazy('index')
 
     def get_object(self, queryset=None):
         return self.request.user

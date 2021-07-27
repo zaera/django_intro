@@ -1,171 +1,190 @@
 {% extends 'template.html' %}
 {% block body_content %}
-{% load static %}
-<div class="row justify-content-center">
-   <div class="col-auto">
-      <table class="table text-center table-responsive">
-         <thead>
-            <tr>
-               <th scope="col"></th>
-               <th scope="col">Bank</th>
-                <th scope="col">Url origin</th>
-               <th scope="col">Url</th>
-               <th scope="col">
-                  <!-- <button type="button" class="btn btn-success">Add new</button>  -->
-               </th>
-            </tr>
-         </thead>
-         <tbody>
-            {% for ls_element in object_list %}
-            <tr>
-               <td class="align-middle">
-                  {% if ls_element.name == "Vkurse" %}
-                  <img class="pic" width="50" src="{% static 'vkurse.jpg' %}">
-                  {% elif ls_element.name == "Privatbank" %}
-                  <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
-                  {% elif ls_element.name == "Monobank" %}
-                  <img class="pic" width="50" src="{% static 'monobank.png' %}">
-                  {% elif ls_element.name == "Abank" %}
-                  <img class="pic" width="50" src="{% static 'abank.png' %}">
-                  {% elif ls_element.name == "Kredobank" %}
-                  <img class="pic" width="50" src="{% static 'kredobank.png' %}">
-                  {% elif ls_element.name == "Pivdenniy" %}
-                  <img class="pic" width="50" src="{% static 'pivd.png' %}">
-                  {% else %}
-                  <img class="pic" width="50" src="{% static 'no_image.png' %}">
-                  {% endif %}
-               </td>
-               <td class="text-truncate align-middle">
-                  {{ ls_element.name }}
-               </td>
-               <td  class="text-truncate align-middle col-md-2">
-                  <a href="{{ls_element.origin_url}}" target="blank">{{ls_element.origin_url}}</a>
-               </td>
-               <td  class="text-truncate align-middle col-md-2">
-                  <a href="{{ls_element.url}}" target="blank">{{ls_element.url}}</a>
-               </td>
-               <td class="align-middle">
-                  <div id="outer">
-                     <button type="button" class="btn btn-warning" onclick='location.href="{% url 'currency_app:bank-read-single' ls_element.id %}"'><i class="fas fa-eye"></i></button>
-                     <button type="button" class="btn btn-primary" onclick='location.href="{% url 'currency_app:bank-update-single' ls_element.id %}"'><i class="fas fa-pencil-alt"></i></button>
-                     <button type="button" class="btn btn-danger" onclick='location.href="{% url 'currency_app:bank-delete-single' ls_element.id %}"'><i class="fas fa-trash-alt"></i></button>
-                  </div>
-               </td>
-            </tr>
-            {% endfor%}
-         </tbody>
-   </div>
-</div>
-</table>
-<a class="contact"> <button type="button" class="btn btn-success" onclick='location.href="{% url 'currency_app:bank-create' %}"'><i class="fas fa-plus-circle"></i></button></a>
-<br>
-<br>
-<span class="glyphicon glyphicon-name"></span>
-<!-- Modal -->
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body" id="modalbody">
-         </div>
-      </div>
-   </div>
-</div>
-</body>
-</html>
-<script type="text/javascript">
-   document.getElementById("banklist").classList.add("active");
-   document.title = "Bank list";
-   let ids = []
-   let names = []
-   let urls=[]
-       {% for ls_element in object_list %}
-   ids.push('{{ls_element.id}}')
-   names.push('{{ls_element.name}}')
-   urls.push('{{ls_element.url}}')
-     {% endfor%}
+    {% load static %}
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <table class="table text-center table-responsive">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Bank</th>
+                    <th scope="col">Url origin</th>
+                    <th scope="col">Url</th>
+                    {% if request.user.id == 1 %}
+                        <th scope="col">View</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for ls_element in object_list %}
+                    <tr>
+                        <td class="align-middle">
+                            {% if ls_element.name == "Vkurse" %}
+                                <img class="pic" width="50" src="{% static 'vkurse.jpg' %}">
+                            {% elif ls_element.name == "Privatbank" %}
+                                <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
+                            {% elif ls_element.name == "Monobank" %}
+                                <img class="pic" width="50" src="{% static 'monobank.png' %}">
+                            {% elif ls_element.name == "Abank" %}
+                                <img class="pic" width="50" src="{% static 'abank.png' %}">
+                            {% elif ls_element.name == "Kredobank" %}
+                                <img class="pic" width="50" src="{% static 'kredobank.png' %}">
+                            {% elif ls_element.name == "Pivdenniy" %}
+                                <img class="pic" width="50" src="{% static 'pivd.png' %}">
+                            {% else %}
+                                <img class="pic" width="50" src="{% static 'no_image.png' %}">
+                            {% endif %}
+                        </td>
+                        <td class="text-truncate align-middle">
+                            {{ ls_element.name }}
+                        </td>
+                        <td class="text-truncate align-middle col-md-2">
+                            <a href="{{ ls_element.origin_url }}" target="blank">{{ ls_element.origin_url }}</a>
+                        </td>
+                        <td class="text-truncate align-middle col-md-2">
+                            <a href="{{ ls_element.url }}" target="blank">{{ ls_element.url }}</a>
+                        </td>
+                        {% if request.user.is_superuser %}
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-warning"
+                                        onclick='location.href="{% url 'currency_app:bank-read-single' ls_element.id %}"'>
+                                    <i class="fas fa-eye"></i></button>
+                            </td>
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-primary"
+                                        onclick='location.href="{% url 'currency_app:bank-update-single' ls_element.id %}"'>
+                                    <i class="fas fa-pencil-alt"></i></button>
+                            </td>
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-danger"
+                                        onclick='location.href="{% url 'currency_app:bank-delete-single' ls_element.id %}"'>
+                                    <i class="fas fa-trash-alt"></i></button>
+                            </td>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+        </div>
+    </div>
+    </table>
+    <a class="contact">
+        <button type="button" class="btn btn-success" onclick='location.href="{% url 'currency_app:bank-create' %}"'><i
+                class="fas fa-plus-circle"></i></button>
+    </a>
+    <br>
+    <br>
+    <span class="glyphicon glyphicon-name"></span>
+    <!-- Modal -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalbody">
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    </html>
+    <script type="text/javascript">
+        document.getElementById("banklist").classList.add("active");
+        document.title = "Bank list";
+        let ids = []
+        let names = []
+        let urls = []
+        {% for ls_element in object_list %}
+            ids.push('{{ls_element.id}}')
+            names.push('{{ls_element.name}}')
+            urls.push('{{ls_element.url}}')
+        {% endfor%}
 
-   $('.modal').on('shown.bs.modal', function (e) {
-   var action = $(e.relatedTarget).data('action');
-   if (action == 'view') {
-     document.getElementById('ModalLabel').innerHTML = 'View'
-   var id = $(e.relatedTarget).data('id');
-     for (var i=0; i<ids.length; i++) {
-       if (ids[i] == id) {
-         id = i
-       }
-     }
-     $( "#modalbody" ).append('<h5 class="card-title">'+names[id]+'</h5>' +
-                              '<p class="card-text"></p>' +
-                              '<a href="'+urls[id]+'" class="card-link text-truncate">'+ urls[id]+'</a>' +
-                              '<div class="modal-footer d-block">' +
-                              '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
-                              '</div>');
-   }
-   else if (action == 'update') {
-     document.getElementById('ModalLabel').innerHTML = 'Update'
-         var id = $(e.relatedTarget).data('id');
-     var original_id = id
-     for (var i=0; i<ids.length; i++) {
-       if (ids[i] == id) {
-         id = i
-       }
-     }
-      $('#modalbody').append('<form id="form_upd" onsubmit="return update()">' +
+        $('.modal').on('shown.bs.modal', function (e) {
+            var action = $(e.relatedTarget).data('action');
+            if (action == 'view') {
+                document.getElementById('ModalLabel').innerHTML = 'View'
+                var id = $(e.relatedTarget).data('id');
+                for (var i = 0; i < ids.length; i++) {
+                    if (ids[i] == id) {
+                        id = i
+                    }
+                }
+                $("#modalbody").append('<h5 class="card-title">' + names[id] + '</h5>' +
+                    '<p class="card-text"></p>' +
+                    '<a href="' + urls[id] + '" class="card-link text-truncate">' + urls[id] + '</a>' +
+                    '<div class="modal-footer d-block">' +
+                    '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>' +
+                    '</div>');
+            } else if (action == 'update') {
+                document.getElementById('ModalLabel').innerHTML = 'Update'
+                var id = $(e.relatedTarget).data('id');
+                var original_id = id
+                for (var i = 0; i < ids.length; i++) {
+                    if (ids[i] == id) {
+                        id = i
+                    }
+                }
+                $('#modalbody').append('<form id="form_upd" onsubmit="return update()">' +
                     '<div class="mb-3">' +
-                    '<label id="data_id">'+original_id+'</label><p>' +
+                    '<label id="data_id">' + original_id + '</label><p>' +
                     '<label class="form-label">Bank Name</label>' +
-                    '<input type="text" maxlength="255" class="form-control" id="bname" name="bname" required value="'+names[id]+'"/>' +
+                    '<input type="text" maxlength="255" class="form-control" id="bname" name="bname" required value="' + names[id] + '"/>' +
                     '</div>' +
                     '<div class="mb-3">' +
                     '<label class="form-label">Link</label>' +
-                    '<input type="text" maxlength="255" class="form-control" id="blink" name="subject" required value="'+urls[id]+'"/>' +
+                    '<input type="text" maxlength="255" class="form-control" id="blink" name="subject" required value="' + urls[id] + '"/>' +
                     '</div>' +
                     '<div class="modal-footer d-block">' +
                     '<button type="submit" class="btn btn-warning float-end">Update</button>' +
-                    '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
+                    '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>' +
                     '</div>' +
                     '</form>');
-   }
-   else if (action == 'create') {
-     document.getElementById('ModalLabel').innerHTML = 'Add new'
-     $('#modalbody').append('<form id="form" method="post"><div class="mb-3">' +
-                            `{% csrf_token %}{{form.as_p}}` +
-                           '</div><div class="modal-footer d-block"><button type="submit" class="btn btn-warning float-end">Add</button> ' +
-                           '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button></div></form>');
-     document.getElementById("id_name").classList.add("form-control");
-     document.getElementById("id_url").classList.add("form-control");
-   }
-   })
-   function del(val){
-     $.ajax({
-         url: '../' + 'delete_single' + '/' + val + '/',
-         success: function(data){
+            } else if (action == 'create') {
+                document.getElementById('ModalLabel').innerHTML = 'Add new'
+                $('#modalbody').append('<form id="form" method="post"><div class="mb-3">' +
+                    `{% csrf_token %}{{form.as_p}}` +
+                    '</div><div class="modal-footer d-block"><button type="submit" class="btn btn-warning float-end">Add</button> ' +
+                    '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button></div></form>');
+                document.getElementById("id_name").classList.add("form-control");
+                document.getElementById("id_url").classList.add("form-control");
+            }
+        })
+
+        function del(val) {
+            $.ajax({
+                url: '../' + 'delete_single' + '/' + val + '/',
+                success: function (data) {
+                    window.location.reload();
+                },
+            })
+        }
+
+        function update() {
+            var id = document.getElementById('data_id').innerHTML;
+            var name = document.getElementById('bname').value;
+            var link = document.getElementById('blink').value;
+            link = encodeURIComponent(link)
+            $.ajax({
+                url: '../' + 'edit' + '/' + id + '/' + name + '/' + encodeURIComponent(link) + '/',
+                success: function (data) {
+                }
+            })
+            setTimeout(function () {
+                document.location.reload();
+            }, 100);
             window.location.reload();
-         },
-   })
-   }
-   function update(){
-      var id = document.getElementById('data_id').innerHTML;
-      var name = document.getElementById('bname').value;
-      var link = document.getElementById('blink').value;
-      link=encodeURIComponent(link)
-      $.ajax({
-         url: '../' + 'edit' + '/' + id + '/'+ name + '/'+ encodeURIComponent(link) + '/',
-         success: function(data){
-         }
-   })
-      setTimeout(function() {   document.location.reload(); }, 100);
-      window.location.reload();
-   }
-   $(".modal").on("hidden.bs.modal", function(){
-    $(".modal-body").html("");
-    document.getElementById('ModalLabel').innerHTML = ''
-   })
-</script>
+        }
+
+        $(".modal").on("hidden.bs.modal", function () {
+            $(".modal-body").html("");
+            document.getElementById('ModalLabel').innerHTML = ''
+        })
+    </script>
 {% endblock body_content %}

@@ -2,7 +2,7 @@
 {% block body_content %}
     {% load static %}
 
-    {% if request.user.is_superuser %}
+    {% if request.user.is_authenticated %}
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table text-center table-responsive">
@@ -49,7 +49,7 @@
                                 {% endif %}
                             </i>
                             </td>
-                            {% if request.user.id == 1 %}
+                            {% if request.user.is_superuser %}
                                 <td class="align-middle">
                                     <button id='{{ ls_element.id }}' type="button" class="btn btn-warning"
                                             data-toggle="modal"
