@@ -1,14 +1,14 @@
 {% extends 'template.html' %}
 {% block body_content %}
-      <form method="post">{% csrf_token %}
-            <p>
-            <div class="container">
-               <div class="col-md-12 text-center">
-                  <button onclick='location.href="{% url 'currency_app:bank-list' %}"' class="btn btn-primary">Back</button>
-                  <button type="submit" class="btn btn-warning">Delete?</button>
-               </div>
+    <form method="post">{% csrf_token %}
+        <p>
+        <div class="container">
+            <div class="col-md-12 text-center">
+                <a href="{% url 'currency_app:bank-list' %}" class="button">Back</a>
+                <button type="submit" class="btn btn-warning">Delete?</button>
             </div>
-      </form>
+        </div>
+    </form>
 {% endblock body_content %}
-   </body>
+</body>
 </html>
