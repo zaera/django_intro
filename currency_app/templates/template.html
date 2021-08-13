@@ -10,9 +10,9 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" type="text/css"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css"/>
     <!-- Font Awesome -->
     <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -33,6 +33,7 @@
         background-repeat: no-repeat;
         overflow-x: hidden;
     }
+
 
     tr td, tr th {
         background-color: rgba(255, 255, 255, 1) !important;
@@ -76,49 +77,138 @@
     .errorlist {
         visibility: visible
     }
+
+    .content {
+        padding-bottom: 150px;
+        padding-top: 30px;
+    }
 </style>
 <body>
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-<nav class="navbar navbar-dark bg-primary fixed-top">
-    <a class="navbar-brand" href="{% url 'index' %}"> <img src="{% static 'dollar.png' %}" width="20" height="30"
-                                                           alt=""> Currency App</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'dollar.png' %}" width="20" height="30"
+                                                          alt=""> Currency App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarText">
+    <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
-            <li id="home" class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Home</a>
-            </li>
-            <li id="banklist" class="nav-item">
-                <a class="nav-link" href="{% url 'currency_app:bank-list' %}">Bank list</a>
-            </li>
-            <li id="ratelist" class="nav-item">
-                <a class="nav-link" href="{% url 'currency_app:rate-list' %}">Rate list</a>
-            </li>
-            <li id="messages" class="nav-item">
-                <a class="nav-link" href="{% url 'currency_app:contact_us_list' %}">Messages</a>
-            </li>
-            <li id="admin" class="nav-item">
-                <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-            </li>
+            {#            <li class="nav-item active">#}
+            {#                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>#}
+            {#            </li>#}
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" href="#">Features</a>#}
+            {#            </li>#}
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" href="#">Pricing</a>#}
+            {#            </li>#}
+        </ul>
+        <ul class="navbar-nav">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:change-password' %}">Change password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Hi, {{ request.user.username }}!</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:signup' %}">SignUp</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'password_reset' %}">Forgot your password?</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
-<br>
-<br>
-<br>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% block body_content %}
-{% endblock body_content %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<div class="content">
+    {% block body_content %}
+    {% endblock body_content %}
+</div>
 </body>
+<br>
+<br>
+<br>
+<footer class=" bg-primary text-white text-center text-lg-start fixed-bottom">
+    <!-- Grid container -->
+    <div class="container p-4">
+        <!--Grid row-->
+        <div class="row">
+            <!--Grid column-->
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                {#                <h5 class="text-uppercase">Footer Content</h5>#}
+                <p>
+                    Currency is an application for more than 5 currencies over Ukraine with
+                    live exchange rates and offline mode. Setup your account to be in touch with a real time updates
+                    and see all the important ...
+                </p>
+            </div>
+            <!--Grid column-->
+            <!--Grid column-->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                {#                <h5 class="text-uppercase">Links</h5>#}
+                <ul class="list-unstyled mb-0">
+                    <li id="home" class="text-white text-uppercase">
+                        <a class="text-white" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li id="banklist" class="text-white text-uppercase">
+                        <a class="text-white" href="{% url 'currency_app:bank-list' %}">Bank list</a>
+                    </li>
+                    <li id="ratelist" class="text-white text-uppercase">
+                        <a class="text-white" href="{% url 'currency_app:rate-list' %}">Rate list</a>
+                    </li>
+                    <li id="ratelist" class="text-white text-uppercase">
+                        <a class="text-white" href="{% url 'currency_app:contact_us_create' %}">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <ul class="list-unstyled">
+                    {% if request.user.is_authenticated %}
+                        <li id="messages" class="text-white text-uppercase">
+                            <a class="text-white" href="{% url 'currency_app:contact_us_list' %}">Messages</a>
+                        </li>
+                        <li id="admin" class="text-white text-uppercase">
+                            <a class="text-white" href="{% url 'admin:index' %}">Admin</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2021
+        <a class="text-white" href="https://mdbootstrap.com/">Currency App</a>
+    </div>
+    <!-- Copyright -->
+</footer>
 </html>

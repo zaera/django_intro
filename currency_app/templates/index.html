@@ -1,10 +1,6 @@
 {% extends 'template.html' %}
 {% block body_content %}
     <div class="card text-center">
-        <div class="card-header">
-            <p>
-            <p>
-        </div>
         <div class="card-body">
             <h5 class="card-title">Welcome to currency App</h5>
             <p class="card-text">Use the following menu to navigate</p>
@@ -31,7 +27,6 @@
                         <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
                     <p>
                     <p>
-
                         <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Sign Up</a>
                     <p>
                     <p>
@@ -40,9 +35,6 @@
                     <p>
                 {% endif %}
 
-        </div>
-        <div class="card-footer text-muted">
-            2 days ago
         </div>
     </div>
     <!-- Modal -->
@@ -61,9 +53,9 @@
         </div>
     </div>
     <!-- Contact US -->
-    <a class="contact" href="{% url 'currency_app:contact_us_create' %}">CONTACT US</a>
-    <script>
-        document.getElementById("home").classList.add("active");
-        document.title = "Home";
-    </script>
+    {#    <a class="contact" href="{% url 'currency_app:contact_us_create' %}">CONTACT US</a>#}
+    {#    <script>#}
+    {#        document.getElementById("home").classList.add("active");#}
+    {#        document.title = "Home";#}
+    {#    </script>#}
 {% endblock body_content %}
