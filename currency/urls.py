@@ -13,4 +13,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('auth/', include('django.contrib.auth.urls')),
     url('^', include('django.contrib.auth.urls')),
+    path('api/', include('api.urls')),
+    # path('api/rates/', RateList.as_view()),
+    # path('api/rates/<int:pk>', RateDetails.as_view()),
+    # path('api/banks/', BankList.as_view()),
 ]

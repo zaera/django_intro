@@ -11,6 +11,7 @@ from currency_app.views import (
                                 contact_us_list,
                                 contact_us_delete,
                                 ContactUsCreate,
+                                RateListApi,
                                 )
 
 app_name = 'currency_app'
@@ -27,4 +28,5 @@ urlpatterns = [
     path('сontact_us/create/', ContactUsCreate.as_view(), name='contact_us_create'),
     path('сontact_us/list/', contact_us_list, name='contact_us_list'),
     path('сontact_us/delete_single/<int:pk>/', contact_us_delete, name='contact_us_delete'),
+    path('self_made_api/rates/', RateListApi.as_view(), name='api-rates'),
 ]
