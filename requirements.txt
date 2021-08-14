@@ -68,7 +68,7 @@ pickleshare==0.7.5
 Pillow==8.2.0
 pipdeptree==2.0.0
 pipenv==2021.5.29
-pkg_resources==0.0.0
+#pkg_resources==0.0.0
 prompt-toolkit==2.0.9
 ptyprocess==0.7.0
 pycodestyle==2.7.0
