@@ -1,6 +1,5 @@
-from django.conf.urls import url
 from django.urls import path, re_path
-from api.views import RateViewSet, BankViewSet, RateChoicesView, ContactUsViewSet
+from api.v1.views import RateViewSet, BankViewSet, RateChoicesView, ContactUsViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,

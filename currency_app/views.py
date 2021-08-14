@@ -132,5 +132,5 @@ class RateListApi(View):
                 'bank': rate.bank_id,
             })
         import json
-        print(results)
+        # print(results)
         return HttpResponse(json.dumps(results), content_type='application/json')
