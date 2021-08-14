@@ -1,7 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from currency_app.models import Rate, Bank, ContactUs
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView, View
 from currency_app.forms import BankForm
 from currency_app.tasks import send_mail_in_bckg
 
@@ -117,3 +118,19 @@ def contact_us_list(request):
 def contact_us_delete(request, pk):
     ContactUs.objects.filter(pk=pk).delete()
     return redirect('currency_app:contact_us_list')
+
+
+class RateListApi(View):
+    def get(self, request):
+        rates = Rate.objects.all()
+        results = []
+        for rate in rates:
+            results.append({
+                'id': rate.id,
+                'sale': float(rate.sale),
+                'buy': float(rate.buy),
+                'bank': rate.bank_id,
+            })
+        import json
+        # print(results)
+        return HttpResponse(json.dumps(results), content_type='application/json')
