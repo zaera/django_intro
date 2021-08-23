@@ -1,6 +1,7 @@
 amqp==5.0.6
 appdirs==1.4.4
 asgiref==3.3.4
+attrs==21.2.0
 backcall==0.2.0
 beautifulsoup4==4.9.3
 billiard==3.6.4.0
@@ -14,6 +15,7 @@ click-plugins==1.1.1
 click-repl==0.2.0
 coreapi==2.3.3
 coreschema==0.0.4
+coverage==5.5
 cryptography==3.4.7
 dateparser==1.0.0
 decorator==5.0.9
@@ -48,6 +50,7 @@ greenlet==1.1.0
 idna==2.10
 importlib-metadata==3.10.1
 inflection==0.5.1
+iniconfig==1.1.1
 ipython==7.16.1
 ipython-genutils==0.2.0
 itypes==1.2.0
@@ -69,14 +72,20 @@ Pillow==8.2.0
 pipdeptree==2.0.0
 pipenv==2021.5.29
 #pkg_resources==0.0.0
+pluggy==0.13.1
 prompt-toolkit==2.0.9
 ptyprocess==0.7.0
+py==1.10.0
 pycodestyle==2.7.0
 pycparser==2.20
 pyflakes==2.3.1
 Pygments==2.9.0
 PyJWT==2.1.0
 pyparsing==2.4.7
+pytest==6.2.4
+pytest-cov==2.12.1
+pytest-django==4.4.0
+pytest-mock==3.6.1
 python-dateutil==2.8.1
 python3-openid==3.2.0
 pytz==2021.1

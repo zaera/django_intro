@@ -1,0 +1,35 @@
+[
+  {
+    "model": "currency_app.rate",
+    "pk": 775,
+    "fields": {
+      "moneytype": 1,
+      "sale": "32.00",
+      "buy": "31.00",
+      "created": "2021-08-13T16:19:20.362Z",
+      "bank": 6
+    }
+  },
+  {
+    "model": "currency_app.rate",
+    "pk": 776,
+    "fields": {
+      "moneytype": 1,
+      "sale": "32.00",
+      "buy": "31.00",
+      "created": "2021-08-13T16:19:20.364Z",
+      "bank": 6
+    }
+  },
+  {
+    "model": "currency_app.rate",
+    "pk": 777,
+    "fields": {
+      "moneytype": 1,
+      "sale": "32.00",
+      "buy": "31.00",
+      "created": "2021-08-13T16:19:20.367Z",
+      "bank": 6
+    }
+  }
+]

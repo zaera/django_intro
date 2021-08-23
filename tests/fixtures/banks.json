@@ -1,0 +1,62 @@
+[
+  {
+    "model": "currency_app.bank",
+    "pk": 1,
+    "fields": {
+      "name": "Privatbank",
+      "code_name": "privatbank",
+      "url": "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5",
+      "origin_url": "https://www.privat24.ua/"
+    }
+  },
+  {
+    "model": "currency_app.bank",
+    "pk": 2,
+    "fields": {
+      "name": "Monobank",
+      "code_name": "monobank",
+      "url": "https://api.monobank.ua/bank/currency",
+      "origin_url": "https://www.monobank.ua/"
+    }
+  },
+  {
+    "model": "currency_app.bank",
+    "pk": 3,
+    "fields": {
+      "name": "Vkurse",
+      "code_name": "vkurse",
+      "url": "http://vkurse.dp.ua/course.json",
+      "origin_url": "http://vkurse.dp.ua/"
+    }
+  },
+  {
+    "model": "currency_app.bank",
+    "pk": 4,
+    "fields": {
+      "name": "Abank",
+      "code_name": "abank",
+      "url": "https://a-bank.com.ua/backend/api/v1/rates",
+      "origin_url": "https://a-bank.com.ua/"
+    }
+  },
+  {
+    "model": "currency_app.bank",
+    "pk": 5,
+    "fields": {
+      "name": "Kredobank",
+      "code_name": "kredobank",
+      "url": "https://kredobank.com.ua/api/currencies/commercial/",
+      "origin_url": "https://kredobank.com.ua/"
+    }
+  },
+  {
+    "model": "currency_app.bank",
+    "pk": 6,
+    "fields": {
+      "name": "Pivdenniy",
+      "code_name": "pivdenniy",
+      "url": "https://bank.com.ua/api/uk/v1/rest-ui/find-branch-course?date=0",
+      "origin_url": "https://bank.com.ua/"
+    }
+  }
+]
