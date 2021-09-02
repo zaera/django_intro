@@ -155,20 +155,14 @@
                         </button>
                     </div>
                     <div class="modal-body" id="modalbody">
-                        <div class="card" style="width: 18rem; margin:0 auto">
-                            <div class="card-body">
-                                <form method="get">
-                                    {{ filter.form.as_p }}
-                                    <div class="container">
-                                        <div class="col-md-12 text-center">
-                                            <button type="submit" class="btn btn-primary">
-                                                <span class="glyphicon glyphicon-search"></span> Apply Filters
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                        <form method="get">
+                            {{ filter.form|crispy }}
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-search"></span> Apply Filters
+                                </button>
                             </div>
-                        </div>
+                        </form>
                         <div class="modal-footer d-block">
                             <button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close
                             </button>
