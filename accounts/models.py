@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from accounts.validators import validate_is_digits
+from accounts.validators import validate_is_digits, validate_email
 
 
 class User(AbstractUser):
@@ -8,7 +8,11 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     email = models.EmailField(
-        'email_address', blank=False, null=False, unique=True,
+        'email_address',
+        blank=False,
+        null=False,
+        unique=True,
+        validators=(validate_email,),
     )
 
     phone = models.CharField(
