@@ -5,6 +5,8 @@ from currency_app.models import Rate, Bank, ContactUs
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView, View
 from currency_app.forms import BankForm
 from currency_app.tasks import send_mail_in_bckg
+from currency_app.filters import RateFilter
+from django_filters.views import FilterView
 
 
 def handler404(request, exception, template_name="index.html"):
@@ -17,7 +19,7 @@ def index_page(request):
     return render(request, 'index.html')
 
 
-class Ratelist(ListView):
+class Ratelist(FilterView):
     model = Rate
     fields = (
         'moneytype',
@@ -28,6 +30,8 @@ class Ratelist(ListView):
     template_name = 'rate_list.html'
     queryset = Rate.objects.all().select_related('bank')
     success_url = reverse_lazy('rate-list')
+    paginate_by = 50
+    filterset_class = RateFilter
 
 
 def rate_edit(request, pk, m, s, b, src):

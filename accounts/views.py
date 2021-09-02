@@ -65,6 +65,8 @@ class Profile(LoginRequiredMixin, UpdateView):
     fields = (
         'first_name',
         'last_name',
+        'phone',
+        'email',
     )
 
     # Alternative way(not preferable)

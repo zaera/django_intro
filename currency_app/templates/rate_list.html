@@ -1,10 +1,64 @@
 {% extends 'template.html' %}
 {% block body_content %}
     {% load static %}
-
+    {% load pagination %}
     {% if request.user.is_authenticated %}
+        {% load crispy_forms_tags %}
+        <style>
+            #button-top {
+                display: inline-block;
+                background-color: #FF9800;
+                width: 50px;
+                height: 50px;
+                text-align: center;
+                border-radius: 4px;
+                position: fixed;
+                bottom: 230px;
+                right: 30px;
+                transition: background-color .3s,
+                opacity .5s, visibility .5s;
+                opacity: 0;
+                visibility: hidden;
+                z-index: 1000;
+            }
+
+            #button-top::after {
+            {#content: "\f077";#} font-family: FontAwesome;
+                font-weight: normal;
+                font-style: normal;
+                font-size: 2em;
+                line-height: 50px;
+                color: #fff;
+            }
+
+            #button-top:hover {
+                cursor: pointer;
+                background-color: #333;
+            }
+
+            #button-top:active {
+                background-color: #555;
+            }
+
+            #button-top.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+
+        </style>
+        <!-- Back to top button -->
+
+        <a id="button-top">top</a>
+
         <div class="row justify-content-center">
             <div class="col-auto">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    Filter
+                </button>
+                {% if is_paginated %}
+                    {% pagination page_obj %}
+                {% endif %}
                 <table class="table text-center table-responsive">
                     <thead>
                     <tr>
@@ -74,7 +128,6 @@
                 </table>
             </div>
         </div>
-
         <!-- Modal -->
         <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -90,9 +143,47 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">Filter</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalbody">
+                        <div class="card" style="width: 18rem; margin:0 auto">
+                            <div class="card-body">
+                                <form method="get">
+                                    {{ filter.form.as_p }}
+                                    <div class="container">
+                                        <div class="col-md-12 text-center">
+                                            <button type="submit" class="btn btn-primary">
+                                                <span class="glyphicon glyphicon-search"></span> Apply Filters
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-block">
+                            <button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         </body>
         </html>
         <script type="text/javascript">
+            $('#myModal2').on('shown.bs.modal', function () {
+                $('#myInput').trigger('focus')
+            })
             {#document.getElementById("ratelist").classList.add("active");#}
             document.title = "Rate list";
             let ids = []
@@ -167,7 +258,6 @@
                         '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>' +
                         '</div>' +
                         '</form>');
-
                 }
             })
 
@@ -198,13 +288,28 @@
             }
 
             $(".modal").on("hidden.bs.modal", function () {
-                $(".modal-body").html("");
                 document.getElementById('ModalLabel').innerHTML = ''
             })
 
             function refreshPage() {
                 window.location.reload();
             }
+
+            var btn = $('#button-top');
+
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 300) {
+                    btn.addClass('show');
+                } else {
+                    btn.removeClass('show');
+                }
+            });
+
+            btn.on('click', function (e) {
+                e.preventDefault();
+                $('html, body').animate({scrollTop: 0}, '300');
+            });
+
         </script>
     {% else %}
         <div class="card text-center">
