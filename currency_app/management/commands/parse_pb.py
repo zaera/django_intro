@@ -36,14 +36,14 @@ class Command(BaseCommand):
         for single_date in daterange(start_date, end_date):
             url = url_base + single_date.strftime("%d.%m.%Y")
             created = datetime(single_date.year, single_date.month, single_date.day)
-            r = requests.get(url)
-            json_ = r.json()
             print(f'Checking if {created} is already in base...') # noqa
-            if not queryset.filter(created=make_aware(created)):
+            if not queryset.filter(created=make_aware(created)).exists():
                 print(f'No record for date {created}, lets grab it!') # noqa
                 print(f'Waiting for {sleep_period} seconds...') # noqa
                 time.sleep(sleep_period)
                 try:
+                    r = requests.get(url)
+                    json_ = r.json()
                     for rate in json_['exchangeRate']:
                         if 'currency' in rate:
                             if 'USD' in rate['currency']:

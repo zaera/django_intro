@@ -12,7 +12,7 @@ class User(AbstractUser):
         blank=False,
         null=False,
         unique=True,
-        validators=(validate_email,),
+        # validators=(validate_email,),
     )
 
     phone = models.CharField(
