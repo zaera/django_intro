@@ -8,32 +8,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css"/>
-    <!-- Font Awesome -->
-    <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-            rel="stylesheet"
-    />
-    <!-- Google Fonts -->
-    <link
-            href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
-            rel="stylesheet"
-    />
+    <title>Currency App</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/bootstrap.min.css' %}"/>
+    <!-- Awesome Fonts -->
+    <link rel="stylesheet" type="text/css" href="{% static 'awesome/css/all.min.css' %}"/>
 </head>
 <style>
+    @font-face {
+        font-family: "QuicksandLight";
+        src: url("{% static 'quicksand/QuicksandLight.eot' %}");
+        src: url("{% static 'quicksand/QuicksandLight.eot?#iefix' %}") format("embedded-opentype"),
+        url("{% static 'quicksand/QuicksandLight.woff' %}") format("woff"),
+        url("{% static 'quicksand/QuicksandLight.ttf' %}") format("truetype");
+        font-style: normal;
+        font-weight: 300;
+    }
+
     body {
         min-height: 81.4vh;
         background: linear-gradient(0deg, #fff, 50%, rgb(210, 231, 252));
-        font-family: 'Quicksand', sans-serif;
+        font-family: 'QuicksandLight', sans-serif;
         font-weight: bold;
         background-repeat: no-repeat;
         overflow-x: hidden;
     }
-
 
     tr td, tr th {
         background-color: rgba(255, 255, 255, 1) !important;
@@ -79,7 +78,7 @@
     }
 
     .content {
-        padding-bottom: 150px;
+        padding-bottom: 40px;
         padding-top: 30px;
     }
 </style>
@@ -147,12 +146,9 @@
     {% endblock body_content %}
 </div>
 </body>
-<br>
-<br>
-<br>
 <footer class=" bg-primary text-white text-center text-lg-start fixed-bottom">
     <!-- Grid container -->
-    <div class="container p-4">
+    <div id="footer_body" class="container p-4">
         <!--Grid row-->
         <div class="row">
             <!--Grid column-->
@@ -181,6 +177,13 @@
                     <li id="ratelist" class="text-white text-uppercase">
                         <a class="text-white" href="{% url 'currency_app:contact_us_create' %}">Contact Us</a>
                     </li>
+                    <li id="ratelist" class="text-white text-uppercase">
+                        <a class="text-white" href="{% url 'api.v1:schema-redoc' %}">Redoc</a>
+                    </li>
+                    <li id="ratelist" class="text-white text-uppercase">
+                        <a class="text-white" href="{% url 'api.v1:schema-swagger-ui' %}">Swagger</a>
+                    </li>
+
                 </ul>
             </div>
             <!--Grid column-->

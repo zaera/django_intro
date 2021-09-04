@@ -22,6 +22,7 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
+app_name = 'api.v1'
 
 router = DefaultRouter()
 router.register(r'rates', RateViewSet, basename='rate')

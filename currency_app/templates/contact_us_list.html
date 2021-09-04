@@ -1,104 +1,113 @@
 {% extends 'template.html' %}
 {% block body_content %}
-{% load static %}
-<div class="row justify-content-center">
-   <div class="col-auto">
-      <table class="table">
-         <thead>
-            <tr>
-               <th scope="col">Email</th>
-               <th scope="col">Subject</th>
-               <th scope="col">Message</th>
-               <th scope="col"></th>
-            </tr>
-         </thead>
-         <tbody>
-            {% for data_element in data %}
-            <tr>
-               <td class="text-truncate">
-                  {{ data_element.email_from }}
-               </td>
-               <td class="text-truncate align-middle">
-                  {{ data_element.subject }}
-               </td>
-               <td class="text-truncate align-middle">
-                  {{ data_element.message }}
-               </td>
-               <td class="align-middle">
-                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#Modal" data-id="{{data_element.id}}" data-action="view"><i class="fas fa-eye"></i></button>
-                  <button type="button" class="btn btn-danger" onclick="del({{data_element.id}})" data-id="{{ls_element.id}}" data-action="delete"><i class="fas fa-trash-alt"></i></button>
-               </td>
-            </tr>
-            {% endfor%}
-         </tbody>
-   </div>
-</div>
-</table>
-<!-- Modal -->
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body" id="modalbody">
-         </div>
-      </div>
-   </div>
-</div>
-</body>
-</html>
-<script>
-   document.getElementById("messages").classList.add("active");
-   document.title = "Messages";
-   let ids = []
-   let email = []
-   let subject = []
-   let message=[]
-   {% for data_element in data %}
-   ids.push('{{data_element.id}}')
-   email.push('{{data_element.email_from}}')
-   subject.push('{{data_element.subject}}')
-   message.push(`{{data_element.message}}`)
-   {% endfor%}
-   $('.modal').on('shown.bs.modal', function (e) {
-   var action = $(e.relatedTarget).data('action');
-   if (action == 'view') {
-     document.getElementById('ModalLabel').innerHTML = 'View'
-   var id = $(e.relatedTarget).data('id');
-     for (var i=0; i<ids.length; i++) {
-       if (ids[i] == id) {
-         id = i
-       }
-     }
-     $( "#modalbody" ).append('<div class="card mb-3" style="max-width: 540px;">\n' +
-             '  <div class="card-body">\n' +
-             '    <h5 class="card-title">'+email[id]+'</h5>\n' +
-             '    <h6 class="card-subtitle mb-2 text-muted">'+ subject[id]+'</h6>\n' +
-             '    <p class="card-text">'+ message[id]+'</p>\n' +
-             '  </div>\n' +
-             '</div>'+
-             '<div class="modal-footer d-block">' +
-             '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>'+
-             '</div>'
-     );
-   }
-   })
-   function del(val){
-      let pre_url="{% url 'currency_app:contact_us_delete' 0 %}";
-      pre_url=pre_url.slice(0, -2);
-     $.ajax({
-         url: pre_url + val + '/',
-         success: function(data){
-            window.location.reload();
-         },
-   })
-   }
-      $(".modal").on("hidden.bs.modal", function(){
-    $(".modal-body").html("");
-   })
-</script>
+    {% load static %}
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Message</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for data_element in data %}
+                    <tr>
+                        <td class="text-truncate">
+                            {{ data_element.email_from }}
+                        </td>
+                        <td class="text-truncate align-middle">
+                            {{ data_element.subject }}
+                        </td>
+                        <td class="text-truncate align-middle">
+                            {{ data_element.message }}
+                        </td>
+                        <td class="align-middle">
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#Modal"
+                                    data-id="{{ data_element.id }}" data-action="view"><i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="del({{ data_element.id }})"
+                                    data-id="{{ ls_element.id }}" data-action="delete"><i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+        </div>
+    </div>
+    </table>
+    <!-- Modal -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalbody">
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    </html>
+    <script>
+        window.onload = function () {
+            document.getElementById('footer_body').style.display = 'none';
+        };
+        document.getElementById("messages").classList.add("active");
+        document.title = "Messages";
+        let ids = []
+        let email = []
+        let subject = []
+        let message = []
+        {% for data_element in data %}
+            ids.push('{{data_element.id}}')
+            email.push('{{data_element.email_from}}')
+            subject.push('{{data_element.subject}}')
+            message.push(`{{data_element.message}}`)
+        {% endfor%}
+        $('.modal').on('shown.bs.modal', function (e) {
+            var action = $(e.relatedTarget).data('action');
+            if (action == 'view') {
+                document.getElementById('ModalLabel').innerHTML = 'View'
+                var id = $(e.relatedTarget).data('id');
+                for (var i = 0; i < ids.length; i++) {
+                    if (ids[i] == id) {
+                        id = i
+                    }
+                }
+                $("#modalbody").append('<div class="card mb-3" style="max-width: 540px;">\n' +
+                    '  <div class="card-body">\n' +
+                    '    <h5 class="card-title">' + email[id] + '</h5>\n' +
+                    '    <h6 class="card-subtitle mb-2 text-muted">' + subject[id] + '</h6>\n' +
+                    '    <p class="card-text">' + message[id] + '</p>\n' +
+                    '  </div>\n' +
+                    '</div>' +
+                    '<div class="modal-footer d-block">' +
+                    '<button type="button" class="btn btn-secondary float-start" data-dismiss="modal">Close</button>' +
+                    '</div>'
+                );
+            }
+        })
+
+        function del(val) {
+            let pre_url = "{% url 'currency_app:contact_us_delete' 0 %}";
+            pre_url = pre_url.slice(0, -2);
+            $.ajax({
+                url: pre_url + val + '/',
+                success: function (data) {
+                    window.location.reload();
+                },
+            })
+        }
+
+        $(".modal").on("hidden.bs.modal", function () {
+            $(".modal-body").html("");
+        })
+    </script>
 {% endblock body_content %}
