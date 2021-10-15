@@ -3,23 +3,25 @@
   <span class="index">
    <li class="page-item disabled">
           <a class="page-link" href="#" tabindex="-1">
-            {% blocktrans with page.number as current_page and page.paginator.num_pages as total_page %}Page {{ current_page }}
+            {% blocktrans with page.number as current_page and page.paginator.num_pages as total_page %}Page
+                {{ current_page }}
                 of {{ total_page }}{% endblocktrans %}
           </a>
     </li>
   </span>
-
     {% if page.has_previous %}
         <span class="previous">
     <a class="page-link" href="?page={{ page.previous_page_number }}"
        title="{% trans "More recent entries" %}">&laquo;</a>
   </span>
-    {% endif %}
 
+    {% endif %}
     {% for page_number in begin %}
         <span class="page {% ifequal page.number page_number %}current{% endifequal %}">
     {% ifequal page.number page_number %}
-        <strong>{{ page_number }}</strong>
+        <li class="page-item active">
+      <a class="page-link" href="#">{{ page_number }}<span class="sr-only">(current)</span></a>
+    </li>
     {% else %}
         <a class="page-link" href="?page={{ page_number }}"
            title="{% trans "Entries page" %} {{ page_number }}">{{ page_number }}</a>
@@ -36,17 +38,17 @@
         {% for page_number in middle %}
             <span class="page-item page {% ifequal page.number page_number %}current{% endifequal %} page-item">
             </span>
-    {% ifequal page.number page_number %}
-        <strong>
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_number }}<span class="sr-only">(current)</span></a>
-            </li>
-        </strong>
-    {% else %}
-        <a class="page-link" href="?page={{ page_number }}"
-           title="{% trans "Entries page" %} {{ page_number }}">{{ page_number }}</a>
-    {% endifequal %}
-  </span>
+            {% ifequal page.number page_number %}
+                <strong>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ page_number }}<span class="sr-only">(current)</span></a>
+                    </li>
+                </strong>
+            {% else %}
+                <a class="page-link" href="?page={{ page_number }}"
+                   title="{% trans "Entries page" %} {{ page_number }}">{{ page_number }}</a>
+            {% endifequal %}
+            </span>
         {% endfor %}
     {% endif %}
 

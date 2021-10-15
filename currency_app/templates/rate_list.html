@@ -7,8 +7,8 @@
         <style>
             #button-top {
                 display: inline-block;
-                background-color: #FF9800;
-                width: 50px;
+                background-color: #007bff;
+            {#background-color: #FF9800;#} width: 50px;
                 height: 50px;
                 text-align: center;
                 border-radius: 4px;
@@ -23,12 +23,13 @@
             }
 
             #button-top::after {
-            {#content: "\f077";#} font-family: FontAwesome;
+            {#font-family: "Font Awesome 5 Brands";#} font-family: "Font Awesome 5 Duotone";
                 font-weight: normal;
                 font-style: normal;
                 font-size: 2em;
                 line-height: 50px;
                 color: #fff;
+                content: "\10f35b";
             }
 
             #button-top:hover {
@@ -44,12 +45,10 @@
                 opacity: 1;
                 visibility: visible;
             }
-
-
         </style>
         <!-- Back to top button -->
 
-        <a id="button-top">top</a>
+        <li id="button-top"></li>
 
         <div class="row justify-content-center">
             <div class="col-auto">
@@ -168,13 +167,15 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
         </body>
         </html>
         <script type="text/javascript">
+            window.onload = function () {
+                document.getElementById('footer_body').style.display = 'none';
+            };
             $('#myModal2').on('shown.bs.modal', function () {
                 $('#myInput').trigger('focus')
             })

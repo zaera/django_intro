@@ -23,7 +23,7 @@
                         <td class="align-middle">
                             {% if ls_element.name == "Vkurse" %}
                                 <img class="pic" width="50" src="{% static 'vkurse.jpg' %}">
-                            {% elif ls_element.name == "Privatbank" %}
+                            {% elif ls_element.name == "PrivatBank" %}
                                 <img class="pic" width="50" src="{% static 'privatbank.jpg' %}">
                             {% elif ls_element.name == "Monobank" %}
                                 <img class="pic" width="50" src="{% static 'monobank.png' %}">
@@ -70,8 +70,10 @@
         </div>
     </div>
     </table>
-    <button type="button" class="btn btn-success" onclick='location.href="{% url 'currency_app:bank-create' %}"'><i
-            class="fas fa-plus-circle"></i></button>
+    {% if request.user.is_superuser %}
+        <button type="button" class="btn btn-success" onclick='location.href="{% url 'currency_app:bank-create' %}"'><i
+                class="fas fa-plus-circle"></i></button>
+    {% endif %}
     <br>
     <br>
     <span class="glyphicon glyphicon-name"></span>
@@ -93,6 +95,9 @@
     </body>
     </html>
     <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById('footer_body').style.display = 'none';
+        };
         document.getElementById("banklist").classList.add("active");
         document.title = "Bank list";
         let ids = []
