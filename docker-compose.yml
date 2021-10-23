@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+
+  backend:
+    image: "backend-local"
+    build: .
+    container_name: backend
+    # stdin_open: true
+    # tty: true
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./:/home/build"
+      - static_volume:/home/build/static_root
+
+  # celery:
+  #   image: "backend-local"
+  #   command: celery -A settings worker -l info --pidfile=/tmp/celery.pid
+  #   build: .
+  #   container_name: celery
+  #   stdin_open: true
+  #   tty: true
+  #   env_file:
+  #     - .env
+
+  # celerybeat:
+  #   image: "backend-local"
+  #   command: celery -A settings beat -l info --schedule=/tmp/celerybeat-schedule --pidfile=/tmp/celerybeat.pid
+  #   build: .
+  #   container_name: celerybeat
+  #   stdin_open: true
+  #   tty: true
+  #   env_file:
+  #     - .env
+
+  memcached:
+    image: memcached
+    container_name: memcached
+
+  rabbitmq:
+    image: rabbitmq:3.9.5-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:13.4-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:1.19
+    container_name: "nginx"
+    volumes:
+      - "./default.conf:/etc/nginx/conf.d/default.conf"
+      - static_volume:/home/build/static_root
+    ports:
+      # - "8080:8080"  # windows specific!!!
+      - "80:80"
+      - "443:443"
+
+volumes:
+  db_data: {}
+  static_volume: {}

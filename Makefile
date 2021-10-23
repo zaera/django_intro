@@ -2,8 +2,17 @@ SHELL := /bin/bash
 
 manage_py := python ./manage.py
 
-# build:
-# 	docker-compose down && docker-compose up -d
+build:
+	docker-compose up -d --build
+
+down:
+	docker-compose down
+
+builddev:
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+
+downdev:
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
 
 runserver:
 	$(manage_py) runserver

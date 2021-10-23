@@ -16,9 +16,9 @@ from celery.schedules import crontab
 from django.urls import reverse_lazy
 from django.contrib.messages import constants as messages
 from datetime import timedelta
+from dotenv import load_dotenv
 
-env = environ.Env()
-environ.Env.read_env()
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k$d#=(62@&b3nmy$rtbf$b!a05i&6%jedsetsxrw5jj6(a$nk2'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'true'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(';')
 
 # Application definition
 
@@ -102,10 +102,21 @@ WSGI_APPLICATION = 'currency.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': 5432,
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -167,7 +178,15 @@ DEFAULT_FROM_EMAIL = "currencyapp@currencyapp.com"  # if you don't already have 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-CELERY_BROKER_URL = 'amqp://127.0.0.1'
+# CELERY_BROKER_URL = 'amqp://127.0.0.1'
+
+CELERY_BROKER_URL = 'amqp://{0}:{1}@{2}:{3}//'.format(
+    os.environ['RABBITMQ_DEFAULT_USER'],
+    os.environ['RABBITMQ_DEFAULT_PASS'],
+    os.getenv('RABBITMQ_DEFAULT_HOST', '127.0.0.1'),
+    os.getenv('RABBITMQ_DEFAULT_PORT', '5672'),
+)
+
 
 CELERY_BEAT_SCHEDULE = {
     'get_currency': {
@@ -181,7 +200,8 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
-DOMAIN = 'htttp://127.0.0.1:8000'
+# DOMAIN = 'htttp://127.0.0.1:8000'
+DOMAIN = os.environ['DOMAIN']
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
